@@ -62,7 +62,7 @@ public class Main extends PApplet {
 	  if (soni.isTrackingSkeleton(player_one)) {	        
 	    PVector leftHand3d = new PVector();
 	    PVector leftHand2d = new PVector();
-	    float confidence = soni.getJointPositionSkeleton(player_one,SimpleOpenNI.SKEL_LEFT_HAND, leftHand3d);
+	    //float confidence = soni.getJointPositionSkeleton(player_one,SimpleOpenNI.SKEL_LEFT_HAND, leftHand3d);
 	    
 	    soni.convertRealWorldToProjective(leftHand3d, leftHand2d);
 	  }
@@ -76,8 +76,8 @@ public class Main extends PApplet {
 	    PVector head3d = new PVector();
 	    PVector head2d = new PVector();
 	    
-	    float confidence = soni.getJointPositionSkeleton(player_two,SimpleOpenNI.SKEL_RIGHT_HAND, rightHand3d);
-	    confidence = soni.getJointPositionSkeleton(player_two,SimpleOpenNI.SKEL_HEAD, head3d);
+	    //float confidence = soni.getJointPositionSkeleton(player_two,SimpleOpenNI.SKEL_RIGHT_HAND, rightHand3d);
+	    //confidence = soni.getJointPositionSkeleton(player_two,SimpleOpenNI.SKEL_HEAD, head3d);
 	    
 	    soni.convertRealWorldToProjective(rightHand3d, rightHand2d);
 	    soni.convertRealWorldToProjective(head3d, head2d);
