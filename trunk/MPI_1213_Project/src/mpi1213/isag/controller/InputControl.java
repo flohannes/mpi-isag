@@ -6,9 +6,7 @@ import processing.core.PImage;
 import processing.core.PVector;
 import SimpleOpenNI.SimpleOpenNI;
 
-public class InputControl {
-	private static final int MAX_PLAYERS = 2;
-	
+public class InputControl {	
 	InputMode inputMode = InputMode.KINECT;
 	SimpleOpenNI context;
 	Model model;
