@@ -1,6 +1,5 @@
 package mpi1213.isag.main;
 
-import SimpleOpenNI.SimpleOpenNI;
 import mpi1213.isag.controller.InputControl;
 import mpi1213.isag.model.Model;
 import processing.core.PApplet;
@@ -47,7 +46,7 @@ public class MainApplet extends PApplet {
 				int playerPixels[] = input.getPlayerPixels(key);
 				loadPixels();
 				for (int i = 0; i < playerPixels.length; i++) {
-					if (playerPixels[i] != 0) {
+					if (playerPixels[i] != 0 && playerPixels[i] == key) {
 						pixels[i] = color(key * 75+25, 100+25, 0+25);
 					}
 				}
