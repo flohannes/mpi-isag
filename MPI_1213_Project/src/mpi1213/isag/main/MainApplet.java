@@ -27,11 +27,17 @@ public class MainApplet extends PApplet {
 		background(0);
 		fill(255);
 		input.update();
-		image(input.getDepthImage(), 0, 0);
-		tint(100);
+		paintKinectImage();
 		paintPlayers();
 	}
 
+	private void paintKinectImage(){
+		if(input.isKinect()){
+			image(input.getDepthImage(), 0, 0);
+			tint(100);
+		}
+	}
+	
 	private void paintPlayers() {
 		for(Integer key:model.getPlayers().keySet()){
 			PVector pos = model.getPlayers().get(key).getPosition();

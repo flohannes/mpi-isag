@@ -11,12 +11,14 @@ public class InputControl {
 	SimpleOpenNI context;
 	Model model;
 
-	public InputControl(PApplet pApplet, Model model) {
-		context = new SimpleOpenNI(pApplet);
+	public InputControl(PApplet applet, Model model) {
+		context = new SimpleOpenNI(applet);
 		this.model = model;
 
-		if (SimpleOpenNI.deviceCount() < 0) {
+		if (SimpleOpenNI.deviceCount() < 1) {
 			inputMode = InputMode.MOUSE;
+			model.addPlayer(0);
+			applet.addMouseMotionListener(model.getPlayers().get(0));
 		} else {
 			context.enableDepth();
 			context.enableRGB();
@@ -39,10 +41,7 @@ public class InputControl {
 					model.getPlayers().get(key).setPosition(hand2d);
 				}	
 			}
-			
-			
 		} else {
-			
 		}
 	}
 	
@@ -71,6 +70,13 @@ public class InputControl {
 		model.removePlayer(userId);
 		context.stopTrackingSkeleton(userId);
 		System.out.println("player " + userId + " lost.");
+	}
+
+	public boolean isKinect() {
+		if(inputMode == InputMode.KINECT){
+			return true;
+		}
+		return false;
 	}
 
 }
