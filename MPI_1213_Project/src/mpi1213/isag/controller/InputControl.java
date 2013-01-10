@@ -23,9 +23,7 @@ public class InputControl {
 			context.enableDepth();
 			context.enableRGB();
 			context.setMirror(true);
-			context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
-			context.addGesture("Click");
-		}
+			context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);		}
 	}
 
 	public void update() {
@@ -77,6 +75,10 @@ public class InputControl {
 			return true;
 		}
 		return false;
+	}
+	
+	public int[] getPlayerPixels(int id){
+		return context.getUsersPixels(id);
 	}
 
 }
