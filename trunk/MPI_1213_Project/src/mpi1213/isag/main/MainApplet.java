@@ -2,6 +2,7 @@ package mpi1213.isag.main;
 
 import mpi1213.isag.controller.InputControl;
 import mpi1213.isag.model.Model;
+import mpi1213.isag.view.Menu;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
