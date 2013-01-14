@@ -9,11 +9,13 @@ import SimpleOpenNI.SimpleOpenNI;
 public class InputControl {	
 	InputMode inputMode = InputMode.KINECT;
 	SimpleOpenNI context;
+	GestureRecognizer gestureRecognizer;
 	Model model;
 
 	public InputControl(PApplet applet, Model model) {
 		context = new SimpleOpenNI(applet);
 		this.model = model;
+		gestureRecognizer = new GestureRecognizer();
 
 		if (SimpleOpenNI.deviceCount() < 1) {
 			inputMode = InputMode.MOUSE;
@@ -37,6 +39,9 @@ public class InputControl {
 					context.getJointPositionSkeleton(key,SimpleOpenNI.SKEL_RIGHT_HAND, hand3d);
 					context.convertRealWorldToProjective(hand3d, hand2d);
 					model.getPlayers().get(key).setPosition(hand2d);
+					if (gestureRecognizer.isPushGesture(hand3d)){
+						System.out.println("pushed! " + System.currentTimeMillis());
+					}
 				}	
 			}
 		} else {
