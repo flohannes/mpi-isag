@@ -2,6 +2,8 @@ package mpi1213.isag.model;
 
 public class Enemy {
 	
+	//TEST
+	
 	private int xPos;
 	private int yPos;
 	
