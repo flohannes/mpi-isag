@@ -8,7 +8,7 @@ import processing.core.PVector;
 public class GestureRecognizer {
 	private static final long Z_TRESHOLD = 70;
 	private static final long XY_THRESHOLD = 50;
-	private static final long TIME_THRESHOLD = 100;
+	private static final long TIME_THRESHOLD = 200;
 	private List<PVector> history = new ArrayList<PVector>();
 	private long first, last;
 

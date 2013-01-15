@@ -1,22 +1,28 @@
 package mpi1213.isag.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mpi1213.isag.model.Model;
+import mpi1213.isag.model.PushListener;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
 import SimpleOpenNI.SimpleOpenNI;
 
 public class InputControl {	
-	InputMode inputMode = InputMode.KINECT;
-	SimpleOpenNI context;
-	GestureRecognizer gestureRecognizer;
-	Model model;
+	private InputMode inputMode = InputMode.KINECT;
+	private SimpleOpenNI context;
+	private Model model;
+	private List<PushListener> listeners;
+	
 
 	public InputControl(PApplet applet, Model model) {
 		context = new SimpleOpenNI(applet);
 		this.model = model;
-		gestureRecognizer = new GestureRecognizer();
-
+		listeners = new ArrayList<PushListener>();
+		listeners.add(model);
+		
 		if (SimpleOpenNI.deviceCount() < 1) {
 			inputMode = InputMode.MOUSE;
 			model.addPlayer(0);
@@ -39,8 +45,9 @@ public class InputControl {
 					context.getJointPositionSkeleton(key,SimpleOpenNI.SKEL_RIGHT_HAND, hand3d);
 					context.convertRealWorldToProjective(hand3d, hand2d);
 					model.getPlayers().get(key).setPosition(hand2d);
-					if (gestureRecognizer.isPushGesture(hand3d)){
+					if(model.getPlayers().get(key).recognizeGesture(hand3d)){
 						System.out.println("pushed! " + System.currentTimeMillis());
+						notifyPushListeners(hand2d);
 					}
 				}	
 			}
@@ -86,4 +93,13 @@ public class InputControl {
 		return context.getUsersPixels(id);
 	}
 
+	public void addPushListener(PushListener listener){
+		listeners.add(listener);
+	}
+	
+	private void notifyPushListeners(PVector vector){
+		for(PushListener listener:listeners){
+			listener.pushed(vector);
+		}
+	}
 }

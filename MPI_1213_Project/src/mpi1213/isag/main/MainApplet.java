@@ -1,8 +1,8 @@
 package mpi1213.isag.main;
 
 import mpi1213.isag.controller.InputControl;
+import mpi1213.isag.model.Enemy;
 import mpi1213.isag.model.Model;
-import mpi1213.isag.view.Menu;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -17,6 +17,7 @@ public class MainApplet extends PApplet {
 
 	public void setup() {
 		model = new Model();
+		model.addDemoEnemies();
 		input = new InputControl(this, model);
 		size(windowWidth, windowHeight);
 		fill(255, 0, 0, 128);
@@ -29,7 +30,16 @@ public class MainApplet extends PApplet {
 		fill(255);
 		input.update();
 		paintKinectImage();
-		paintPlayers();
+		paintPlayerShapes();
+		paintEnemies();
+		paintPlayerCrosshairs();
+	}
+
+	private void paintEnemies() {
+		for(Enemy enemy:model.getEnemies()){
+			enemy.move(this.getWidth(), this.getHeight());
+			rect(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+		}
 	}
 
 	private void paintKinectImage() {
@@ -38,11 +48,9 @@ public class MainApplet extends PApplet {
 			tint(100);
 		}
 	}
-
-	private void paintPlayers() {
+	
+	private void paintPlayerShapes() {
 		for (Integer key : model.getPlayers().keySet()) {
-			PVector pos = model.getPlayers().get(key).getPosition();
-			fill(key * 75, 100, 0);
 			if (input.isKinect()) {
 				int playerPixels[] = input.getPlayerPixels(key);
 				loadPixels();
@@ -53,7 +61,15 @@ public class MainApplet extends PApplet {
 				}
 				updatePixels();
 			}
-			ellipse(pos.x, pos.y, 100, 100);
+		}
+	}
+	
+	private void paintPlayerCrosshairs() {
+		for (Integer key : model.getPlayers().keySet()) {
+			PVector pos = model.getPlayers().get(key).getPosition();
+			fill(key * 75, 100, 0);
+			rect(pos.x - 50, pos.y - 5, 100, 10);
+			rect(pos.x - 5, pos.y - 50, 10, 100);
 		}
 	}
 
