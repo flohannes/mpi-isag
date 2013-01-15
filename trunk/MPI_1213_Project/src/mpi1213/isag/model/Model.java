@@ -7,14 +7,13 @@ import java.util.Map;
 
 import processing.core.PVector;
 
-
-public class Model implements PushListener{
+public class Model implements PushListener {
 	private static final int MAX_PLAYERS = 2;
-	
+
 	private Map<Integer, Player> players;
-	
+
 	private List<Enemy> enemies;
-	
+
 	public Model() {
 		players = new HashMap<Integer, Player>();
 		enemies = new ArrayList<Enemy>();
@@ -25,7 +24,7 @@ public class Model implements PushListener{
 	}
 
 	public boolean addPlayer(int id) {
-		if(players.size() <= MAX_PLAYERS) {
+		if (players.size() <= MAX_PLAYERS) {
 			players.put(id, new Player());
 			return true;
 		}
@@ -38,17 +37,28 @@ public class Model implements PushListener{
 
 	@Override
 	public void pushed(PVector vector) {
-		for(int i = 0; i < enemies.size(); i++){
-			if(enemies.get(i).isHit((int)vector.x, (int)vector.y)){
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemies.get(i).isHit((int) vector.x, (int) vector.y)) {
 				enemies.remove(i);
 			}
 		}
 	}
 
-	public void addDemoEnemies() {
-		//for(int i= 0; i< 10;i++){
-			enemies.add(new Enemy());
-		//}
+	public void addDemoEnemies(int windowWidth, int windowHeight) {
+
+		for (int i = 0; i < 5; i++) {
+			enemies.add(new Enemy(Math.random() * windowWidth, Math.random()
+					* windowHeight, Enemy.MIN_WIDTH + Math.random()
+					* (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1), Enemy.MIN_WIDTH
+					+ Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1),
+					Enemy.MIN_DELTA + Math.random()
+							* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1),
+					Enemy.MIN_DELTA + Math.random()
+							* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10
+							+ (float) Math.random() * (255 - 10), (float) Math
+							.random() * (255 - 10), (float) Math.random()
+							* (255 - 10)));
+		}
 	}
 
 	public List<Enemy> getEnemies() {

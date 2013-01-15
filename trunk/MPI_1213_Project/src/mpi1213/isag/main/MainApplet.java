@@ -17,7 +17,7 @@ public class MainApplet extends PApplet {
 
 	public void setup() {
 		model = new Model();
-		model.addDemoEnemies();
+		model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
 		size(windowWidth, windowHeight);
 		fill(255, 0, 0, 128);
@@ -38,6 +38,7 @@ public class MainApplet extends PApplet {
 	private void paintEnemies() {
 		for(Enemy enemy:model.getEnemies()){
 			enemy.move(this.getWidth(), this.getHeight());
+			fill(enemy.getR(), enemy.getG(), enemy.getB());
 			rect(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
 		}
 	}
