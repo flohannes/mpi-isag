@@ -3,6 +3,7 @@ package mpi1213.isag.main;
 import mpi1213.isag.controller.InputControl;
 import mpi1213.isag.model.Enemy;
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.view.MenuView;
 import mpi1213.isag.view.ViewState;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -16,7 +17,7 @@ public class MainApplet extends PApplet {
 	InputControl input;
 	GamingModel model;
 	
-	ViewState viewState;
+	ViewState viewState = ViewState.STARTMENU;
 
 	public void setup() {
 		model = new GamingModel();
@@ -34,6 +35,14 @@ public class MainApplet extends PApplet {
 		background(0);
 		fill(255);
 		input.update();
+		switch(viewState){
+			case STARTMENU:
+				MenuView.drawMainMenu(this, model);
+				break;
+			default:
+				break;
+		}
+		
 		paintKinectImage();
 		paintPlayerShapes();
 		paintEnemies();
