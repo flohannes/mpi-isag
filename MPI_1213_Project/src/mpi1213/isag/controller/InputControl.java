@@ -3,7 +3,7 @@ package mpi1213.isag.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import mpi1213.isag.model.Model;
+import mpi1213.isag.model.GamingModel;
 import mpi1213.isag.model.PushListener;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -13,11 +13,11 @@ import SimpleOpenNI.SimpleOpenNI;
 public class InputControl {	
 	private InputMode inputMode = InputMode.KINECT;
 	private SimpleOpenNI context;
-	private Model model;
+	private GamingModel model;
 	private List<PushListener> listeners;
 	
 
-	public InputControl(PApplet applet, Model model) {
+	public InputControl(PApplet applet, GamingModel model) {
 		context = new SimpleOpenNI(applet);
 		this.model = model;
 		listeners = new ArrayList<PushListener>();
