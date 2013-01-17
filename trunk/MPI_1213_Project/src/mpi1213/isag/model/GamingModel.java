@@ -11,12 +11,13 @@ public class GamingModel implements PushListener {
 	private static final int MAX_PLAYERS = 2;
 
 	private Map<Integer, Player> players;
-
 	private List<Enemy> enemies;
+	private List<Button> buttons;
 
 	public GamingModel() {
 		players = new HashMap<Integer, Player>();
 		enemies = new ArrayList<Enemy>();
+		buttons = new ArrayList<Button>();
 	}
 
 	public void removePlayer(int id) {
@@ -41,6 +42,9 @@ public class GamingModel implements PushListener {
 			if (enemies.get(i).isHit((int) vector.x, (int) vector.y)) {
 				enemies.remove(i);
 			}
+		}
+		for(Button btn:buttons){
+			btn.evaluateClick(vector);
 		}
 	}
 

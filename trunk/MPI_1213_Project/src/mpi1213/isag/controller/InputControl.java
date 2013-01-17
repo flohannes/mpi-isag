@@ -1,5 +1,8 @@
 package mpi1213.isag.controller;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +13,12 @@ import processing.core.PImage;
 import processing.core.PVector;
 import SimpleOpenNI.SimpleOpenNI;
 
-public class InputControl {	
+public class InputControl implements MouseMotionListener, MouseListener{	
 	private InputMode inputMode = InputMode.KINECT;
 	private SimpleOpenNI context;
 	private GamingModel model;
 	private List<PushListener> listeners;
 	
-
 	public InputControl(PApplet applet, GamingModel model) {
 		context = new SimpleOpenNI(applet);
 		this.model = model;
@@ -26,7 +28,8 @@ public class InputControl {
 		if (SimpleOpenNI.deviceCount() < 1) {
 			inputMode = InputMode.MOUSE;
 			model.addPlayer(0);
-			applet.addMouseMotionListener(model.getPlayers().get(0));
+			applet.addMouseMotionListener(this);
+			applet.addMouseListener(this);
 		} else {
 			context.enableDepth();
 			context.enableRGB();
@@ -101,5 +104,45 @@ public class InputControl {
 		for(PushListener listener:listeners){
 			listener.pushed(vector);
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		notifyPushListeners(new PVector(e.getPoint().x, e.getPoint().y));
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		model.getPlayers().get(0).setPosition(new PVector(e.getPoint().x, e.getPoint().y));
 	}
 }
