@@ -14,7 +14,7 @@ public class GamingModel implements PushListener {
 
 	private List<Enemy> enemies;
 
-	public Model() {
+	public GamingModel() {
 		players = new HashMap<Integer, Player>();
 		enemies = new ArrayList<Enemy>();
 	}
