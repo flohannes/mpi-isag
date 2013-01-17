@@ -7,7 +7,7 @@ import java.util.Map;
 
 import processing.core.PVector;
 
-public class Model implements PushListener {
+public class GamingModel implements PushListener {
 	private static final int MAX_PLAYERS = 2;
 
 	private Map<Integer, Player> players;
