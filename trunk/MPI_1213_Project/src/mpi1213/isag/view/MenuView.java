@@ -4,11 +4,11 @@ import java.awt.Point;
 
 import mpi1213.isag.main.MainApplet;
 
-public class Menu {
+public class MenuView {
 	
 	private MainApplet applet;
 	
-	public Menu(MainApplet applet){
+	public MenuView(MainApplet applet){
 		this.applet = applet;
 	}
 	
