@@ -1,5 +1,7 @@
 package mpi1213.isag.view;
 
+import java.awt.Point;
+
 import mpi1213.isag.main.MainApplet;
 
 public class Menu {
