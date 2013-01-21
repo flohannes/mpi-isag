@@ -7,7 +7,8 @@ public class GamingView {
 	private ViewState viewState;
 	private MainApplet mainApplet;
 	private int time;
-	private int points;
+	private int pointsP1;
+	private int pointsP2;
 	
 	public GamingView(ViewState viewState, MainApplet mainApplet){
 		this.viewState = viewState;
@@ -16,13 +17,19 @@ public class GamingView {
 	}
 
 	public void drawGame(){
-		if(ViewState.SINGLEPLAYER == viewState){
-			this.drawSingleplayer();
+		if(time > 0){
+			//Je nach viewState das Game starten
+			if(ViewState.SINGLEPLAYER == viewState){
+				this.drawSingleplayer();
+			}else if(ViewState.COOP == viewState){
+				this.drawCOOP();
+			}else if(ViewState.PVP == viewState){
+				this.drawPVP();
+			}
 		}
-		else if(ViewState.COOP == viewState){
-			this.drawCOOP();
-		}else if(ViewState.PVP == viewState){
-			this.drawPVP();
+		else{
+			//viewState aendern und zum Highscore oder Hauptmenue
+			viewState = ViewState.HIGHSCORE;
 		}
 			
 	}
@@ -33,7 +40,7 @@ public class GamingView {
 		//Bullets
 		
 		//Points
-		mainApplet.text(points,  20, 50);
+		mainApplet.text(pointsP1,  20, 50);
 		//Time
 		mainApplet.text("0 : " + time, mainApplet.getWidth()/2-20, 50);
 		time--;
@@ -53,9 +60,9 @@ public class GamingView {
 		//Bullets P2
 		
 		//Points P1
-		mainApplet.text(points,  20, 50);
+		mainApplet.text(pointsP1,  20, 50);
 		//Points P2
-		mainApplet.text(points,  550, 50);
+		mainApplet.text(pointsP2,  550, 50);
 				
 		//Time
 		mainApplet.text("0 : " + time, mainApplet.getWidth()/2-20, 50);
@@ -79,9 +86,9 @@ public class GamingView {
 		//Bullets P2
 		
 		//Points P1
-		mainApplet.text(points,  20, 50);
+		mainApplet.text(pointsP1,  20, 50);
 		//Points P2
-		mainApplet.text(points,  550, 50);
+		mainApplet.text(pointsP2,  550, 50);
 				
 		//Time
 		mainApplet.text("0 : " + time, mainApplet.getWidth()/2-20, 50);
