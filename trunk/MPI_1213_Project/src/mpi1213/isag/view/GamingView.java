@@ -16,6 +16,18 @@ public class GamingView {
 	}
 
 	public void drawGame(){
+		if(ViewState.SINGLEPLAYER == viewState){
+			this.drawSingleplayer();
+		}
+		else if(ViewState.COOP == viewState){
+			this.drawCOOP();
+		}else if(ViewState.PVP == viewState){
+			this.drawPVP();
+		}
+			
+	}
+	
+	private void drawSingleplayer(){
 		//Player 1
 		mainApplet.text("Player 1", 20, 20);
 		//Bullets
@@ -28,7 +40,60 @@ public class GamingView {
 		//Reload
 		mainApplet.color(150 * 75+25, 100+25, 0+25);
 		mainApplet.rect(2, 2, 40, 20);
+	}
+	
+	private void drawCOOP(){
+		//Player 1
+		mainApplet.text("Player 1", 20, 20);
 		
+		//Player 2
+		mainApplet.text("Player 2", 550, 20);
+		
+		//Bullets P1
+		//Bullets P2
+		
+		//Points P1
+		mainApplet.text(points,  20, 50);
+		//Points P2
+		mainApplet.text(points,  550, 50);
+				
+		//Time
+		mainApplet.text("0 : " + time, mainApplet.getWidth()/2-20, 50);
+		time--;
+		//Reload P1
+		mainApplet.color(150 * 75+25, 100+25, 0+25);
+		mainApplet.rect(2, 2, 40, 20);
+		//Reload P2
+		mainApplet.color(150 * 75+25, 100+25, 0+25);
+		mainApplet.rect(2, 2, 40, 20);
+	}
+	
+	private void drawPVP(){
+		//Player 1
+		mainApplet.text("Player 1", 20, 20);
+		
+		//Player 2
+		mainApplet.text("Player 2", 550, 20);
+		
+		//Bullets P1
+		//Bullets P2
+		
+		//Points P1
+		mainApplet.text(points,  20, 50);
+		//Points P2
+		mainApplet.text(points,  550, 50);
+				
+		//Time
+		mainApplet.text("0 : " + time, mainApplet.getWidth()/2-20, 50);
+		time--;
+		//Trennline
+		
+		//Reload P1
+		mainApplet.color(150 * 75+25, 100+25, 0+25);
+		mainApplet.rect(2, 2, 40, 20);
+		//Reload P2
+		mainApplet.color(150 * 75+25, 100+25, 0+25);
+		mainApplet.rect(2, 2, 40, 20);
 	}
 		
 }
