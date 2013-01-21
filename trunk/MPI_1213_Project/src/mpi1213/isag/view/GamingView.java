@@ -102,5 +102,11 @@ public class GamingView {
 		mainApplet.color(150 * 75+25, 100+25, 0+25);
 		mainApplet.rect(2, 2, 40, 20);
 	}
+	
+	private void drawFadenkreuzP1(){
 		
+	}
+	private void drawFadenkreuzP2(){
+		
+	}	
 }
