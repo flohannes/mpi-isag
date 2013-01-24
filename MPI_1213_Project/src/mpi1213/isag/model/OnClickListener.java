@@ -1,5 +1,5 @@
 package mpi1213.isag.model;
 
 public interface OnClickListener {
-	public void onClick();
+	public void onClick(Button button);
 }

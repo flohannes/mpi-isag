@@ -3,6 +3,7 @@ package mpi1213.isag.main;
 import mpi1213.isag.controller.InputControl;
 import mpi1213.isag.model.Enemy;
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.view.GamingView;
 import mpi1213.isag.view.MenuView;
 import mpi1213.isag.view.ViewState;
 import processing.core.PApplet;
@@ -11,23 +12,24 @@ import processing.core.PVector;
 
 public class MainApplet extends PApplet {
 	private static final long serialVersionUID = 3497175479855519829L;
-	int windowWidth = 640;
-	int windowHeight = 480;
-	PImage soniImage;
-	InputControl input;
-	GamingModel model;
+	private int windowWidth = 640;
+	private int windowHeight = 480;
+	private PImage soniImage;
+	private InputControl input;
+	private GamingModel model;
+	private GamingView gView;
 	
 	ViewState viewState = ViewState.STARTMENU;
 
 	public void setup() {
-		model = new GamingModel();
-		model.addDemoEnemies(this.width, this.height);
-		input = new InputControl(this, model);
 		size(windowWidth, windowHeight);
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
 		
+		model = new GamingModel(this.getWidth(), this.getHeight());
+		//model.addDemoEnemies(this.width, this.height);
+		input = new InputControl(this, model);
 		viewState = ViewState.STARTMENU;
 	}
 
@@ -38,6 +40,18 @@ public class MainApplet extends PApplet {
 		switch(viewState){
 			case STARTMENU:
 				MenuView.drawMainMenu(this, model);
+				if(model.allPlayerReady()){
+					if(model.getPlayers().size() == 1){
+						viewState = ViewState.SINGLEPLAYER;
+						model.addDemoEnemies(this.getWidth(), this.getHeight());
+						gView = new GamingView(viewState, this);
+					} else if (model.getPlayers().size() == 2){
+						viewState = ViewState.MULTIPLAYERMENU;
+					}
+				}
+				break;
+			case SINGLEPLAYER:
+				gView.drawGame();
 				break;
 			default:
 				break;

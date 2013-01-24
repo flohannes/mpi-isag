@@ -1,6 +1,7 @@
 package mpi1213.isag.view;
 
 import mpi1213.isag.main.MainApplet;
+import mpi1213.isag.model.Button;
 import mpi1213.isag.model.GamingModel;
 
 public class MenuView {
@@ -14,10 +15,13 @@ public class MenuView {
 	public static void drawMainMenu(MainApplet applet, GamingModel model){
 		applet.text("I.S.A.G", applet.getWidth() / 2 - 20, 50);
 		applet.text("Please Shoot into the Target", applet.getWidth() / 2 - 60, 100);
-		applet.rect(10, 200, 80, 80);
-		applet.rect(300, 200, 80, 80);
-		applet.text("Player 1", 220, 270);
-		applet.text("Player 2", 315, 270);
+
+		//draw buttons
+		int factor = model.getPlayerButtons().size() + 1;
+		for(Button btn:model.getPlayerButtons()){
+			applet.rect(btn.getPosition().x, btn.getPosition().y, btn.getWidth(), btn.getHeight());
+			applet.text(btn.getText(), btn.getPosition().x, btn.getPosition().y);
+		}
 	}
 	
 	

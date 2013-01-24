@@ -3,7 +3,7 @@ package mpi1213.isag.model;
 import mpi1213.isag.controller.GestureRecognizer;
 import processing.core.PVector;
 
-public class Player{
+public class Player implements OnClickListener{
 	
 	private static int MAX_MUNITION = 10;
 	
@@ -11,6 +11,7 @@ public class Player{
 	private GestureRecognizer gestureRecognizer = new GestureRecognizer();
 	private int points;
 	private int munition;
+	private boolean isReady = false;
 	
 	public PVector getPosition(){
 		return targetPosition;
@@ -49,5 +50,14 @@ public class Player{
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isReady(){
+		return isReady;
+	}
+
+	@Override
+	public void onClick(Button button) {
+		isReady = true;
 	}
 }
