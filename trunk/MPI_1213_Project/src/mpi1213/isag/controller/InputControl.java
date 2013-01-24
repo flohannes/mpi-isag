@@ -54,7 +54,6 @@ public class InputControl implements MouseMotionListener, MouseListener{
 					}
 				}	
 			}
-		} else {
 		}
 	}
 	
