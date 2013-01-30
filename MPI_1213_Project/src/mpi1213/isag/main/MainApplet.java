@@ -44,7 +44,7 @@ public class MainApplet extends PApplet {
 					if(model.getPlayers().size() == 1){
 						viewState = ViewState.SINGLEPLAYER;
 						model.addDemoEnemies(this.getWidth(), this.getHeight());
-						gView = new GamingView(viewState, this);
+						gView = new GamingView(viewState, this, model);
 					} else if (model.getPlayers().size() == 2){
 						viewState = ViewState.MULTIPLAYERMENU;
 					}
