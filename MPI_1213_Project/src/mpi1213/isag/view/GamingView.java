@@ -39,7 +39,7 @@ public class GamingView {
 		//Player 1
 		mainApplet.text("Player 1", 20, 20);
 		//Bullets
-		for(int i =0; i< 10;i++){
+		for(int i =0; i< model.getPlayers().get(0).getMunition();i++){
 			int x1 = i * 10;
 			int y1 = 30;
 			int x2 = x1+8;
@@ -47,7 +47,7 @@ public class GamingView {
 			mainApplet.rect(x1,y1,x2,y2);
 		}
 		//Points
-		mainApplet.text(model.getPlayers().get(0).getPoints(),  20, 50);
+		mainApplet.text(model.getPlayers().get(0).getPoints(),  20, 100);
 		//Time
 		mainApplet.text("0 : " + (int)(time/60), mainApplet.getWidth()/2-20, 50);
 		time--;
