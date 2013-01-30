@@ -13,6 +13,9 @@ public class Player implements OnClickListener{
 	private int munition;
 	private boolean isReady = false;
 	
+	public Player(){
+		munition=10;
+	}
 	public PVector getPosition(){
 		return targetPosition;
 	}
@@ -39,6 +42,10 @@ public class Player implements OnClickListener{
 
 	public void setMunition(int munition) {
 		this.munition = munition;
+	}
+	
+	public void reloadMunition() {
+		this.munition = 10;
 	}
 	
 	public void increasePoints(int pointsToAdd){
