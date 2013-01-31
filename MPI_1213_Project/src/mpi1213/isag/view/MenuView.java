@@ -19,7 +19,8 @@ public class MenuView {
 		//draw buttons
 		int factor = model.getPlayerButtons().size() + 1;
 		for(Button btn:model.getPlayerButtons()){
-			applet.rect(btn.getPosition().x, btn.getPosition().y, btn.getWidth(), btn.getHeight());
+			applet.image(applet.getZielscheibeRot(),btn.getPosition().x, btn.getPosition().y) ;
+//			applet.rect(btn.getPosition().x, btn.getPosition().y, btn.getWidth(), btn.getHeight());
 			applet.text(btn.getText(), btn.getPosition().x, btn.getPosition().y);
 		}
 	}

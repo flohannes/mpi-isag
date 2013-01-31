@@ -21,7 +21,10 @@ public class MainApplet extends PApplet {
 	private GamingModel model;
 	private GamingView gView;
 	private PImage backgroundImg;
-	
+	private PImage ammo;
+	private PImage zielscheibeRot;
+	private PImage zielscheibeGruen;
+
 	ViewState viewState = ViewState.STARTMENU;
 
 	public void setup() {
@@ -29,15 +32,22 @@ public class MainApplet extends PApplet {
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
+		//Images
 		backgroundImg = loadImage("Images/sternenhimmel.jpg");
 		backgroundImg.resize(windowWidth, windowHeight);
-		background(backgroundImg);
+		ammo = loadImage("Images/ammo.png");
+		ammo.resize(windowWidth/45,0);
+		zielscheibeRot = loadImage("Images/target_red.png");
+		zielscheibeRot.resize(windowWidth/10, 0);
+		zielscheibeGruen = loadImage("Images/target_green.png");
 		
 		model = new GamingModel(this.getWidth(), this.getHeight());
 		//model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
 		viewState = ViewState.STARTMENU;
 	}
+
+	
 
 	public void draw() {
 		background(0);
@@ -121,5 +131,15 @@ public class MainApplet extends PApplet {
 
 	public void onEndCalibration(int id, boolean successfull) {
 		input.endCalibration(id, successfull);
+	}
+	public PImage getAmmo() {
+		return ammo;
+	}
+	public PImage getZielscheibeRot() {
+		return zielscheibeRot;
+	}
+
+	public PImage getZielscheibeGruen() {
+		return zielscheibeGruen;
 	}
 }
