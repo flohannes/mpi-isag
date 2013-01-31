@@ -1,10 +1,8 @@
 package mpi1213.isag.main;
 
 import mpi1213.isag.controller.InputControl;
-import mpi1213.isag.model.Button;
 import mpi1213.isag.model.Enemy;
 import mpi1213.isag.model.GamingModel;
-import mpi1213.isag.model.ReloadButton;
 import mpi1213.isag.view.GamingView;
 import mpi1213.isag.view.MenuView;
 import mpi1213.isag.view.ViewState;
@@ -24,72 +22,77 @@ public class MainApplet extends PApplet {
 	private PImage ammo;
 	private PImage zielscheibeRot;
 	private PImage zielscheibeGruen;
+	private static PImage alien1;
+	private static PImage alien2;
+	private static PImage alien3;
+	private static PImage alien4;
 
 	ViewState viewState = ViewState.STARTMENU;
 
 	public void setup() {
 		size(windowWidth, windowHeight);
-//		this.scale(2);
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
-		//Images
+		// Images
 		backgroundImg = loadImage("Images/sternenhimmel.jpg");
 		backgroundImg.resize(windowWidth, windowHeight);
 		ammo = loadImage("Images/ammo.png");
-		ammo.resize(windowWidth/45,0);
+		ammo.resize(windowWidth / 45, 0);
 		zielscheibeRot = loadImage("Images/target_red.png");
-		zielscheibeRot.resize(windowWidth/10, 0);
+		zielscheibeRot.resize(windowWidth / 10, 0);
 		zielscheibeGruen = loadImage("Images/target_green.png");
-		
+		// static alien images
+		alien1 = loadImage("Images/alien_01.png");
+		alien2 = loadImage("Images/alien_02.png");
+		alien3 = loadImage("Images/alien_03.png");
+		alien4 = loadImage("Images/alien_04.png");
+
 		model = new GamingModel(this.getWidth(), this.getHeight());
-		//model.addDemoEnemies(this.width, this.height);
+		// model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
 		viewState = ViewState.STARTMENU;
-	
 	}
 
-	
-
 	public void draw() {
-//		this.scale(2);
 		background(0);
-		image(backgroundImg,0,0);
-		
+		image(backgroundImg, 0, 0);
+
 		fill(255);
 		input.update();
-		//paintKinectImage();
+		// paintKinectImage();
 		paintPlayerShapes();
-		
-		switch(viewState){
-			case STARTMENU:
-				MenuView.drawMainMenu(this, model);
-				if(model.allPlayerReady()){
-					if(model.getPlayers().size() == 1){
-						viewState = ViewState.SINGLEPLAYER;
-						model.addDemoEnemies(this.getWidth(), this.getHeight());
-						gView = new GamingView(viewState, this, model);
-					} else if (model.getPlayers().size() == 2){
-						viewState = ViewState.MULTIPLAYERMENU;
-					}
+
+		switch (viewState) {
+		case STARTMENU:
+			MenuView.drawMainMenu(this, model);
+			if (model.allPlayerReady()) {
+				if (model.getPlayers().size() == 1) {
+					viewState = ViewState.SINGLEPLAYER;
+					model.addDemoEnemies(this.getWidth(), this.getHeight());
+					gView = new GamingView(viewState, this, model);
+				} else if (model.getPlayers().size() == 2) {
+					viewState = ViewState.MULTIPLAYERMENU;
 				}
-				break;
-			case SINGLEPLAYER:
-				gView.drawGame();
-				break;
-			default:
-				break;
+			}
+			break;
+		case SINGLEPLAYER:
+			gView.drawGame();
+			break;
+		default:
+			break;
 		}
-		
+
 		paintEnemies();
 		paintPlayerCrosshairs();
 	}
 
 	private void paintEnemies() {
-		for(Enemy enemy:model.getEnemies()){
+		for (Enemy enemy : model.getEnemies()) {
 			enemy.move(this.getWidth(), this.getHeight());
 			fill(enemy.getR(), enemy.getG(), enemy.getB());
 			rect(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight());
+			image(enemy.getImage(), enemy.getX(), enemy.getY());
 		}
 	}
 
@@ -99,7 +102,7 @@ public class MainApplet extends PApplet {
 			tint(100);
 		}
 	}
-	
+
 	private void paintPlayerShapes() {
 		for (Integer key : model.getPlayers().keySet()) {
 			if (input.isKinect()) {
@@ -107,14 +110,14 @@ public class MainApplet extends PApplet {
 				loadPixels();
 				for (int i = 0; i < playerPixels.length; i++) {
 					if (playerPixels[i] != 0 && playerPixels[i] == key) {
-						pixels[i] = color(key * 75+25, 100+25, 0+25);
+						pixels[i] = color(key * 75 + 25, 100 + 25, 0 + 25);
 					}
 				}
 				updatePixels();
 			}
 		}
 	}
-	
+
 	private void paintPlayerCrosshairs() {
 		for (Integer key : model.getPlayers().keySet()) {
 			PVector pos = model.getPlayers().get(key).getPosition();
@@ -135,14 +138,33 @@ public class MainApplet extends PApplet {
 	public void onEndCalibration(int id, boolean successfull) {
 		input.endCalibration(id, successfull);
 	}
+
 	public PImage getAmmo() {
 		return ammo;
 	}
+
 	public PImage getZielscheibeRot() {
 		return zielscheibeRot;
 	}
 
 	public PImage getZielscheibeGruen() {
 		return zielscheibeGruen;
+	}
+
+	public static PImage getRandomAlienImage() {
+		int random = (int) (1 + Math.random() * (4 - 1 + 1));
+
+		switch (random) {
+		case 1:
+			return alien1;
+		case 2:
+			return alien2;
+		case 3:
+			return alien3;
+		case 4:
+			return alien4;
+		default:
+			return null;
+		}
 	}
 }
