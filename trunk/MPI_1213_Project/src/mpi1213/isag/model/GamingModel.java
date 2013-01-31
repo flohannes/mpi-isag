@@ -78,9 +78,12 @@ public class GamingModel implements PushListener {
 			}
 			counter++;
 		}
-		if(counter == enemies.size() && players.get(0).getMunition()>0){
-			players.get(0).setShoot(vector);
-		}
+//		if(enemies != null && players != null){
+			if(counter == enemies.size() && players.get(0).getMunition()>0){
+				players.get(0).setShoot(vector);
+			}
+//		}
+		
 		
 		players.get(0).setMunition(players.get(0).getMunition()-1);
 		
