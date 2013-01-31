@@ -42,10 +42,18 @@ public class GamingView {
 		for(int i =0; i< model.getPlayers().get(0).getMunition();i++){
 			int x1 = i * 10;
 			int y1 = 30;
-			int x2 = x1+8;
-			int y2 = y1+15;
+			int x2 = 8;
+			int y2 = 15;
 			mainApplet.rect(x1,y1,x2,y2);
 		}
+		//Missed shoots
+		if(model.getPlayers().get(0).getShoot() != null){
+			if(model.getPlayers().get(0).getShoot().z > 0){
+				mainApplet.rect(model.getPlayers().get(0).getShoot().x, model.getPlayers().get(0).getShoot().y, 3,3);	
+				model.getPlayers().get(0).decreaseShoot();
+			}
+		}
+		
 		//Points
 		mainApplet.text(model.getPlayers().get(0).getPoints(),  20, 100);
 		//Time
