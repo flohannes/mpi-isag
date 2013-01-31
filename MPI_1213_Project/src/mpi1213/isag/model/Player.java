@@ -66,7 +66,11 @@ public class Player implements OnClickListener{
 
 	@Override
 	public void onClick(Button button) {
-		isReady = true;
+		if(button instanceof ReloadButton){
+			reloadMunition();
+		} else {
+			isReady = true;
+		}
 	}
 	public PVector getShoot() {
 		return shoot;

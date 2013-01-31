@@ -2,6 +2,7 @@ package mpi1213.isag.view;
 
 import mpi1213.isag.main.MainApplet;
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.model.ReloadButton;
 
 public class GamingView {
 
@@ -68,8 +69,9 @@ public class GamingView {
 		mainApplet.fill(255);
 		time--;
 		//Reload
-		mainApplet.color(150 * 75+25, 100+25, 0+25);
-		mainApplet.rect(2, mainApplet.getHeight()-42, 40, 20);
+		for(ReloadButton rBtn:model.getReloadButtons().values()){
+			mainApplet.rect(rBtn.getPosition().x, rBtn.getPosition().y, rBtn.getWidth(), rBtn.getHeight());
+		}
 	}
 	
 	
