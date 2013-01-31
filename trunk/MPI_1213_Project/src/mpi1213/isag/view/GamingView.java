@@ -51,6 +51,12 @@ public class GamingView {
 				int y1 = 28;
 				mainApplet.image(mainApplet.getAmmo(), x1, y1);
 			}
+			if(model.getPlayers().get(key).getMunition() <= 0){
+				mainApplet.textSize(30);
+				mainApplet.fill(255,0,0);
+				mainApplet.text("R E L O A D", bulletStartX+26, 55);
+				mainApplet.textSize(12);
+			}
 			// Missed shoots
 			if (model.getPlayers().get(key).getShoot() != null) {
 				if (model.getPlayers().get(key).getShoot().z > 0) {

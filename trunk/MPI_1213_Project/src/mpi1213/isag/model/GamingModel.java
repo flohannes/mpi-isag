@@ -77,11 +77,11 @@ public class GamingModel implements PushListener {
 						Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), Enemy.MIN_DELTA + Math.random()
 								* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random()
 								* (255 - 10), (float) Math.random() * (255 - 10)));
+				counter++;
 			}
-			counter++;
 		}
 		
-		if (counter == enemies.size() && player.getMunition() > 0) {
+		if (counter == 0 && player.getMunition() > 0) {
 			player.setShoot(vector);
 		}
 
