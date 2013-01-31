@@ -29,6 +29,7 @@ public class MainApplet extends PApplet {
 
 	public void setup() {
 		size(windowWidth, windowHeight);
+//		this.scale(2);
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
@@ -45,11 +46,13 @@ public class MainApplet extends PApplet {
 		//model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
 		viewState = ViewState.STARTMENU;
+	
 	}
 
 	
 
 	public void draw() {
+//		this.scale(2);
 		background(0);
 		image(backgroundImg,0,0);
 		
