@@ -1,5 +1,11 @@
 package mpi1213.isag.model;
 
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
+import mpi1213.isag.main.MainApplet;
+
 import processing.core.PImage;
 
 
@@ -28,31 +34,35 @@ public class Enemy{
 	private float g = 100;
 	private float b = 100;
 	
-	public Enemy(PImage img, double x, double y, double width, double height, double deltaX, double deltaY, float r, float g, float b){
-		this(img, x, y, width, height, deltaX, deltaY);
+	public Enemy(double x, double y, double width, double height, double deltaX, double deltaY, float r, float g, float b){
+		this(x, y, width, height, deltaX, deltaY);
 		this.r = r;
 		this.g = g;
 		this.b = b;
 	}
 	
-	public Enemy(PImage img, double x, double y, double width, double height, double deltaX, double deltaY){
+	public Enemy(double x, double y, double width, double height, double deltaX, double deltaY){
 		this.xPos = (int)x;
 		this.yPos = (int)y;
 		this.width = (int)width;
 		this.height = (int)height;
 		this.deltaX = (int)deltaX;
 		this.deltaY = (int)deltaY;
-		this.image = img;
+		try {
+			this.image = (PImage)MainApplet.getRandomAlienImage().clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		image.resize(this.width, 0);
 	}
 	
-	public Enemy(PImage img) {
-		this.width = 70;
-		this.height = 70;
-		this.xPos = 0;
-		this.yPos = 200;
-		this.deltaX = 2;
-		this.deltaY = 0;
-		this.image = img;
+	public Enemy(int width, int height){
+		this(Math.random() * width, Math.random() * height, Enemy.MIN_WIDTH + Math.random()
+				* (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1), Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1),
+				Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), Enemy.MIN_DELTA + Math.random()
+						* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random()
+						* (255 - 10), (float) Math.random() * (255 - 10));
 	}
 	
 	public void move(int windowWidth, int windowHeight){
@@ -98,5 +108,9 @@ public class Enemy{
 
 	public float getB() {
 		return b;
+	}
+	
+	public PImage getImage(){
+		return this.image;
 	}
 }
