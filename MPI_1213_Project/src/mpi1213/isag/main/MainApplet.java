@@ -45,6 +45,9 @@ public class MainApplet extends PApplet {
 		
 		fill(255);
 		input.update();
+		//paintKinectImage();
+		paintPlayerShapes();
+		
 		switch(viewState){
 			case STARTMENU:
 				MenuView.drawMainMenu(this, model);
@@ -65,8 +68,6 @@ public class MainApplet extends PApplet {
 				break;
 		}
 		
-		paintKinectImage();
-		paintPlayerShapes();
 		paintEnemies();
 		paintPlayerCrosshairs();
 	}
