@@ -46,12 +46,11 @@ public class GamingView {
 			} else {
 				bulletStartX = 0;
 			}
-			for (int j = bulletStartX; j < model.getPlayers().get(i).getMunition(); j++) {
-				int x1 = j * 10;
-				int y1 = 30;
-				int x2 = 8;
-				int y2 = 15;
-				mainApplet.rect(x1, y1, x2, y2);
+			for(int j =0; j< model.getPlayers().get(0).getMunition();j++){
+				
+				int x1 = bulletStartX * j;
+				int y1 = 28;
+				mainApplet.image(mainApplet.getAmmo(), x1, y1);
 			}
 			// Missed shoots
 			if (model.getPlayers().get(i).getShoot() != null) {
