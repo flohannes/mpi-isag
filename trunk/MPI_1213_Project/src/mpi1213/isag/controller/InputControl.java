@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.model.Player;
 import mpi1213.isag.model.PushListener;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -50,7 +51,7 @@ public class InputControl implements MouseMotionListener, MouseListener{
 					model.getPlayers().get(key).setPosition(hand2d);
 					if(model.getPlayers().get(key).recognizeGesture(hand3d)){
 						System.out.println("pushed! " + System.currentTimeMillis());
-						notifyPushListeners(hand2d);
+						notifyPushListeners(hand2d, model.getPlayers().get(key));
 					}
 				}	
 			}
@@ -99,9 +100,9 @@ public class InputControl implements MouseMotionListener, MouseListener{
 		listeners.add(listener);
 	}
 	
-	private void notifyPushListeners(PVector vector){
+	private void notifyPushListeners(PVector vector, Player player){
 		for(PushListener listener:listeners){
-			listener.pushed(vector);
+			listener.pushed(vector, player);
 		}
 	}
 
@@ -113,7 +114,7 @@ public class InputControl implements MouseMotionListener, MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		notifyPushListeners(new PVector(e.getPoint().x, e.getPoint().y));
+		notifyPushListeners(new PVector(e.getPoint().x, e.getPoint().y), model.getPlayers().get(0));
 	}
 
 	@Override
