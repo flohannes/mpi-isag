@@ -51,7 +51,7 @@ public class GamingView {
 				int y1 = 28;
 				mainApplet.image(mainApplet.getAmmo(), x1, y1);
 			}
-			if(model.getPlayers().get(key).getMunition() <= 0){
+			if(model.getPlayers().get(key).getMunition() <= 0 && mainApplet.millis()%3 == 0){
 				mainApplet.textSize(30);
 				mainApplet.fill(255,0,0);
 				mainApplet.text("R E L O A D", bulletStartX+26, 55);
