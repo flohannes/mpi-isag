@@ -47,7 +47,7 @@ public class GamingModel implements PushListener {
 	}
 
 	@Override
-	public void pushed(PVector vector) {
+	public void pushed(PVector vector, Player player) {
 		int counter = 0;
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && players.get(0).getMunition()>0) {
@@ -109,4 +109,5 @@ public class GamingModel implements PushListener {
 			counter++;
 		}
 	}
+
 }

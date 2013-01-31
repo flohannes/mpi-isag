@@ -49,15 +49,23 @@ public class GamingView {
 		//Missed shoots
 		if(model.getPlayers().get(0).getShoot() != null){
 			if(model.getPlayers().get(0).getShoot().z > 0){
+				mainApplet.fill(255,0,0);
 				mainApplet.rect(model.getPlayers().get(0).getShoot().x, model.getPlayers().get(0).getShoot().y, 3,3);	
 				model.getPlayers().get(0).decreaseShoot();
 			}
 		}
+		mainApplet.fill(255);
 		
 		//Points
 		mainApplet.text(model.getPlayers().get(0).getPoints(),  20, 100);
 		//Time
-		mainApplet.text("0 : " + (int)(time/60), mainApplet.getWidth()/2-20, 50);
+		if((int)(time/60)<6){
+			mainApplet.fill(255,0,0);
+			mainApplet.text("0 : " + (int)(time/60), mainApplet.getWidth()/2-20, 50);
+		}else{
+			mainApplet.text("0 : " + (int)(time/60), mainApplet.getWidth()/2-20, 50);	
+		}
+		mainApplet.fill(255);
 		time--;
 		//Reload
 		mainApplet.color(150 * 75+25, 100+25, 0+25);
