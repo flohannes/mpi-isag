@@ -1,8 +1,10 @@
 package mpi1213.isag.main;
 
 import mpi1213.isag.controller.InputControl;
+import mpi1213.isag.model.Button;
 import mpi1213.isag.model.Enemy;
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.model.ReloadButton;
 import mpi1213.isag.view.GamingView;
 import mpi1213.isag.view.MenuView;
 import mpi1213.isag.view.ViewState;

@@ -14,12 +14,14 @@ public class GamingModel implements PushListener {
 	private Map<Integer, Player> players;
 	private List<Enemy> enemies;
 	private Map<Integer, Button> playerButtons;
+	private Map<Integer, ReloadButton> reloadButtons;
 	private int width, height;
 
 	public GamingModel(int width, int height) {
 		players = new HashMap<Integer, Player>();
 		enemies = new ArrayList<Enemy>();
 		playerButtons = new HashMap<Integer, Button>();
+		reloadButtons = new HashMap<Integer, ReloadButton>();
 		
 		this.width = width;
 		this.height = height;
@@ -28,15 +30,29 @@ public class GamingModel implements PushListener {
 	public void removePlayer(int id) {
 		players.remove(id);
 		playerButtons.remove(id);
+		reloadButtons.remove(id);
 	}
 
 	public boolean addPlayer(int id) {
 		if (players.size() < MAX_PLAYERS) {
 			players.put(id, new Player());
+			//player button
 			Button button = new Button(0, 0, 100, 100, "Player " + players.size());
 			button.setOnClickListener(players.get(id));
 			playerButtons.put(id, button);
+			
+			//reload button
+			ReloadButton rButton;
+			String text = "Reload (P" + players.size() + ")";
+			if(players.get(id).getPosition().x < width/2){
+				rButton = new ReloadButton(10, height - 50, 40, 40, text);
+			} else {
+				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text);
+			}
+			rButton.setOnClickListener(players.get(id));
+			reloadButtons.put(id, rButton);
 			updatePlayerButtonLayout();
+			
 			return true;
 		}
 		return false;
@@ -59,7 +75,6 @@ public class GamingModel implements PushListener {
 						Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), Enemy.MIN_DELTA + Math.random()
 								* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random() * (255 - 10),
 						(float) Math.random() * (255 - 10)));
-				break;
 			}
 			counter++;
 		}
@@ -70,6 +85,10 @@ public class GamingModel implements PushListener {
 		players.get(0).setMunition(players.get(0).getMunition()-1);
 		
 		for (Button btn : playerButtons.values()) {
+			btn.evaluateClick(vector);
+		}
+		
+		for (Button btn : reloadButtons.values()) {
 			btn.evaluateClick(vector);
 		}
 	}
@@ -110,4 +129,7 @@ public class GamingModel implements PushListener {
 		}
 	}
 
+	public Map<Integer, ReloadButton> getReloadButtons() {
+		return reloadButtons;
+	}
 }
