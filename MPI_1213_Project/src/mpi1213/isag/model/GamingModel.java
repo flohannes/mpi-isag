@@ -48,6 +48,7 @@ public class GamingModel implements PushListener {
 
 	@Override
 	public void pushed(PVector vector) {
+		int counter = 0;
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && players.get(0).getMunition()>0) {
 				enemies.remove(i);
@@ -58,10 +59,16 @@ public class GamingModel implements PushListener {
 						Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), Enemy.MIN_DELTA + Math.random()
 								* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random() * (255 - 10),
 						(float) Math.random() * (255 - 10)));
+				break;
 			}
+			counter++;
 		}
+		if(counter == enemies.size() && players.get(0).getMunition()>0){
+			players.get(0).setShoot(vector);
+		}
+		
 		players.get(0).setMunition(players.get(0).getMunition()-1);
-
+		
 		for (Button btn : playerButtons.values()) {
 			btn.evaluateClick(vector);
 		}

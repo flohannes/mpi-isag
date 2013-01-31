@@ -9,6 +9,7 @@ public class Player implements OnClickListener{
 	
 	private PVector targetPosition = new PVector();
 	private GestureRecognizer gestureRecognizer = new GestureRecognizer();
+	private PVector shoot;
 	private int points;
 	private int munition;
 	private boolean isReady = false;
@@ -66,5 +67,15 @@ public class Player implements OnClickListener{
 	@Override
 	public void onClick(Button button) {
 		isReady = true;
+	}
+	public PVector getShoot() {
+		return shoot;
+	}
+	public void setShoot(PVector shoot) {
+		this.shoot = shoot;
+		this.shoot.z = 100;
+	}
+	public void decreaseShoot(){
+		this.shoot.z--;
 	}
 }
