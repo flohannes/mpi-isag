@@ -50,11 +50,13 @@ public class Enemy{
 		this.deltaY = (int)deltaY;
 		try {
 			this.image = (PImage)MainApplet.getRandomAlienImage().clone();
+			image.resize(this.width, 0);
+			this.height = image.height;
 		} catch (CloneNotSupportedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		image.resize(this.width, 0);
+		
 	}
 	
 	public Enemy(int width, int height){
