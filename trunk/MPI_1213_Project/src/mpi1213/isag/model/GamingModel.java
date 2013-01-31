@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import processing.core.PImage;
 import processing.core.PVector;
 
 public class GamingModel implements PushListener {
@@ -69,8 +70,9 @@ public class GamingModel implements PushListener {
 			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && player.getMunition() > 0) {
 				enemies.remove(i);
 				// points von player hinzufuegen
+				
 				player.setPoints(player.getPoints() + 10);
-				enemies.add(new Enemy(Math.random() * this.width, Math.random() * this.height, Enemy.MIN_WIDTH + Math.random()
+				enemies.add(new Enemy(null, Math.random() * this.width, Math.random() * this.height, Enemy.MIN_WIDTH + Math.random()
 						* (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1), Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1),
 						Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), Enemy.MIN_DELTA + Math.random()
 								* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random()
@@ -97,7 +99,7 @@ public class GamingModel implements PushListener {
 	public void addDemoEnemies(int windowWidth, int windowHeight) {
 
 		for (int i = 0; i < 5; i++) {
-			enemies.add(new Enemy(Math.random() * windowWidth, Math.random() * windowHeight, Enemy.MIN_WIDTH + Math.random()
+			enemies.add(new Enemy(null,Math.random() * windowWidth, Math.random() * windowHeight, Enemy.MIN_WIDTH + Math.random()
 					* (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1), Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1),
 					Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), Enemy.MIN_DELTA + Math.random()
 							* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random() * (255 - 10),

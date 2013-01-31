@@ -1,5 +1,7 @@
 package mpi1213.isag.model;
 
+import processing.core.PImage;
+
 
 public class Enemy{
 	
@@ -19,34 +21,38 @@ public class Enemy{
 	private int deltaX;
 	private int deltaY;
 	
+	private PImage image;
+	
 	//temporary colors
 	private float r = 100;
 	private float g = 100;
 	private float b = 100;
 	
-	public Enemy(double x, double y, double width, double height, double deltaX, double deltaY, float r, float g, float b){
-		this(x, y, width, height, deltaX, deltaY);
+	public Enemy(PImage img, double x, double y, double width, double height, double deltaX, double deltaY, float r, float g, float b){
+		this(img, x, y, width, height, deltaX, deltaY);
 		this.r = r;
 		this.g = g;
 		this.b = b;
 	}
 	
-	public Enemy(double x, double y, double width, double height, double deltaX, double deltaY){
+	public Enemy(PImage img, double x, double y, double width, double height, double deltaX, double deltaY){
 		this.xPos = (int)x;
 		this.yPos = (int)y;
 		this.width = (int)width;
 		this.height = (int)height;
 		this.deltaX = (int)deltaX;
 		this.deltaY = (int)deltaY;
+		this.image = img;
 	}
 	
-	public Enemy() {
+	public Enemy(PImage img) {
 		this.width = 70;
 		this.height = 70;
 		this.xPos = 0;
 		this.yPos = 200;
 		this.deltaX = 2;
 		this.deltaY = 0;
+		this.image = img;
 	}
 	
 	public void move(int windowWidth, int windowHeight){

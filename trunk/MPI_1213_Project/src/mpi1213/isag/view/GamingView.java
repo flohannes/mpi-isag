@@ -36,33 +36,33 @@ public class GamingView {
 	}
 
 	private void drawSingleplayer() {
-		for (int i = 0; i < model.getPlayers().keySet().size(); i++) {
+		for (Integer key:model.getPlayers().keySet()) {
 			// Player 1
-			mainApplet.text("Player 1", 20, 20);
+			mainApplet.text("Player "+key, 20, 20);
 			// Bullets
 			int bulletStartX;
-			if (model.getReloadButtons().get(i).getPosition().x > mainApplet.getWidth() / 2) {
+			if (model.getReloadButtons().get(key).getPosition().x > mainApplet.getWidth() / 2) {
 				bulletStartX = mainApplet.getWidth() - 120;
 			} else {
 				bulletStartX = 0;
 			}
-			for(int j =0; j< model.getPlayers().get(0).getMunition();j++){
+			for(int j =0; j< model.getPlayers().get(key).getMunition();j++){
 				int x1 = bulletStartX + j * (mainApplet.getAmmo().width + 1);
 				int y1 = 28;
 				mainApplet.image(mainApplet.getAmmo(), x1, y1);
 			}
 			// Missed shoots
-			if (model.getPlayers().get(i).getShoot() != null) {
-				if (model.getPlayers().get(i).getShoot().z > 0) {
+			if (model.getPlayers().get(key).getShoot() != null) {
+				if (model.getPlayers().get(key).getShoot().z > 0) {
 					mainApplet.fill(255, 0, 0);
-					mainApplet.rect(model.getPlayers().get(i).getShoot().x, model.getPlayers().get(i).getShoot().y, 3, 3);
-					model.getPlayers().get(i).decreaseShoot();
+					mainApplet.rect(model.getPlayers().get(key).getShoot().x, model.getPlayers().get(key).getShoot().y, 3, 3);
+					model.getPlayers().get(key).decreaseShoot();
 				}
 			}
 			mainApplet.fill(255);
 
 			// Points
-			mainApplet.text(model.getPlayers().get(i).getPoints(), 20, 100);
+			mainApplet.text(model.getPlayers().get(key).getPoints(), 20, 100);
 		}
 		/*
 		 * //Player 1 mainApplet.text("Player 1", 20, 20); //Bullets for(int i
