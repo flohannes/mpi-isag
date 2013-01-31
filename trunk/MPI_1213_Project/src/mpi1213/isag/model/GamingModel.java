@@ -22,7 +22,7 @@ public class GamingModel implements PushListener {
 		enemies = new ArrayList<Enemy>();
 		playerButtons = new HashMap<Integer, Button>();
 		reloadButtons = new HashMap<Integer, ReloadButton>();
-		
+
 		this.width = width;
 		this.height = height;
 	}
@@ -36,15 +36,15 @@ public class GamingModel implements PushListener {
 	public boolean addPlayer(int id) {
 		if (players.size() < MAX_PLAYERS) {
 			players.put(id, new Player());
-			//player button
+			// player button
 			Button button = new Button(0, 0, 100, 100, "Player " + players.size());
 			button.setOnClickListener(players.get(id));
 			playerButtons.put(id, button);
-			
-			//reload button
+
+			// reload button
 			ReloadButton rButton;
 			String text = "Reload (P" + players.size() + ")";
-			if(players.get(id).getPosition().x < width/2){
+			if (players.get(id).getPosition().x < width / 2) {
 				rButton = new ReloadButton(10, height - 50, 40, 40, text);
 			} else {
 				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text);
@@ -52,7 +52,7 @@ public class GamingModel implements PushListener {
 			rButton.setOnClickListener(players.get(id));
 			reloadButtons.put(id, rButton);
 			updatePlayerButtonLayout();
-			
+
 			return true;
 		}
 		return false;
@@ -66,31 +66,29 @@ public class GamingModel implements PushListener {
 	public void pushed(PVector vector, Player player) {
 		int counter = 0;
 		for (int i = 0; i < enemies.size(); i++) {
-			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && players.get(0).getMunition()>0) {
+			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && player.getMunition() > 0) {
 				enemies.remove(i);
-				//points von player hinzufuegen
-				players.get(0).setPoints(players.get(0).getPoints()+10);
+				// points von player hinzufuegen
+				player.setPoints(player.getPoints() + 10);
 				enemies.add(new Enemy(Math.random() * this.width, Math.random() * this.height, Enemy.MIN_WIDTH + Math.random()
 						* (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1), Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1),
 						Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), Enemy.MIN_DELTA + Math.random()
-								* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random() * (255 - 10),
-						(float) Math.random() * (255 - 10)));
+								* (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1), 10 + (float) Math.random() * (255 - 10), (float) Math.random()
+								* (255 - 10), (float) Math.random() * (255 - 10)));
 			}
 			counter++;
 		}
-//		if(enemies != null && players != null){
-			if(counter == enemies.size() && players.get(0).getMunition()>0){
-				players.get(0).setShoot(vector);
-			}
-//		}
 		
-		
-		players.get(0).setMunition(players.get(0).getMunition()-1);
-		
+		if (counter == enemies.size() && player.getMunition() > 0) {
+			player.setShoot(vector);
+		}
+
+		player.setMunition(player.getMunition() - 1);
+
 		for (Button btn : playerButtons.values()) {
 			btn.evaluateClick(vector);
 		}
-		
+
 		for (Button btn : reloadButtons.values()) {
 			btn.evaluateClick(vector);
 		}
@@ -110,24 +108,24 @@ public class GamingModel implements PushListener {
 	public List<Enemy> getEnemies() {
 		return enemies;
 	}
-	
-	public Collection<Button> getPlayerButtons(){
+
+	public Collection<Button> getPlayerButtons() {
 		return playerButtons.values();
 	}
-	
-	public boolean allPlayerReady(){
+
+	public boolean allPlayerReady() {
 		boolean result = true;
-		for(Player player:players.values()){
+		for (Player player : players.values()) {
 			result = result && player.isReady();
 		}
 		return result;
 	}
-	
-	private void updatePlayerButtonLayout(){
+
+	private void updatePlayerButtonLayout() {
 		int factor = playerButtons.size() + 1;
 		int counter = 1;
-		for(Button btn:playerButtons.values()){
-			btn.setPosition(new PVector(counter * (width / factor) - (btn.getWidth() / 2), 2* height / 3));
+		for (Button btn : playerButtons.values()) {
+			btn.setPosition(new PVector(counter * (width / factor) - (btn.getWidth() / 2), 2 * height / 3));
 			counter++;
 		}
 	}
