@@ -18,6 +18,7 @@ public class MainApplet extends PApplet {
 	private InputControl input;
 	private GamingModel model;
 	private GamingView gView;
+	private PImage backgroundImg;
 	
 	ViewState viewState = ViewState.STARTMENU;
 
@@ -26,6 +27,9 @@ public class MainApplet extends PApplet {
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
+		backgroundImg = loadImage("Images/sternenhimmel.jpg");
+		backgroundImg.resize(windowWidth, windowHeight);
+		background(backgroundImg);
 		
 		model = new GamingModel(this.getWidth(), this.getHeight());
 		//model.addDemoEnemies(this.width, this.height);
@@ -35,6 +39,8 @@ public class MainApplet extends PApplet {
 
 	public void draw() {
 		background(0);
+		image(backgroundImg,0,0);
+		
 		fill(255);
 		input.update();
 		switch(viewState){
