@@ -47,8 +47,7 @@ public class GamingView {
 				bulletStartX = 0;
 			}
 			for(int j =0; j< model.getPlayers().get(0).getMunition();j++){
-				
-				int x1 = bulletStartX * j;
+				int x1 = bulletStartX + j * (mainApplet.getAmmo().width + 1);
 				int y1 = 28;
 				mainApplet.image(mainApplet.getAmmo(), x1, y1);
 			}
