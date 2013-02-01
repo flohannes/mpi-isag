@@ -37,9 +37,9 @@ public class Enemy {
 				Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1), deltaX, deltaY, 10 + (float) Math.random() * (255 - 10),
 				(float) Math.random() * (255 - 10), (float) Math.random() * (255 - 10));
 	}
-	
-	private double getRandomDirection(){
-		if (Math.random() < 0.5){
+
+	private double getRandomDirection() {
+		if (Math.random() < 0.5) {
 			return -1;
 		} else {
 			return 1;

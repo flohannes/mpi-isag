@@ -33,8 +33,8 @@ public class GestureRecognizer {
 	}
 
 	private boolean checkPush() {
-		if(last - first < TIME_THRESHOLD){
-			if(Math.abs(history.get(0).z - history.get(history.size()-1).z) > Z_TRESHOLD){
+		if (last - first < TIME_THRESHOLD) {
+			if (Math.abs(history.get(0).z - history.get(history.size() - 1).z) > Z_TRESHOLD) {
 				reset();
 				return true;
 			}
@@ -44,9 +44,7 @@ public class GestureRecognizer {
 
 	private boolean checkPossiblePush(PVector current, PVector previous) {
 		// check whether z direction and other axes nearly steady
-		if (previous.z > current.z
-				&& Math.abs(previous.x - current.x) < XY_THRESHOLD
-				&& Math.abs(previous.y - current.y) < XY_THRESHOLD) {
+		if (previous.z > current.z && Math.abs(previous.x - current.x) < XY_THRESHOLD && Math.abs(previous.y - current.y) < XY_THRESHOLD) {
 			return true;
 		}
 		return false;

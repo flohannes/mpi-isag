@@ -14,18 +14,18 @@ import processing.core.PImage;
 import processing.core.PVector;
 import SimpleOpenNI.SimpleOpenNI;
 
-public class InputControl implements MouseMotionListener, MouseListener{	
+public class InputControl implements MouseMotionListener, MouseListener {
 	private InputMode inputMode = InputMode.KINECT;
 	private SimpleOpenNI context;
 	private GamingModel model;
 	private List<PushListener> listeners;
-	
+
 	public InputControl(PApplet applet, GamingModel model) {
 		context = new SimpleOpenNI(applet);
 		this.model = model;
 		listeners = new ArrayList<PushListener>();
 		listeners.add(model);
-		
+
 		if (SimpleOpenNI.deviceCount() < 1) {
 			inputMode = InputMode.MOUSE;
 			model.addPlayer(0);
@@ -35,31 +35,32 @@ public class InputControl implements MouseMotionListener, MouseListener{
 			context.enableDepth();
 			context.enableRGB();
 			context.setMirror(true);
-			context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);		}
+			context.enableUser(SimpleOpenNI.SKEL_PROFILE_ALL);
+		}
 	}
 
 	public void update() {
 		if (inputMode == InputMode.KINECT) {
 			context.update();
-			
-			for(Integer key:model.getPlayers().keySet()){
+
+			for (Integer key : model.getPlayers().keySet()) {
 				if (context.isTrackingSkeleton(key)) {
 					PVector hand3d = new PVector();
 					PVector hand2d = new PVector();
-					context.getJointPositionSkeleton(key,SimpleOpenNI.SKEL_RIGHT_HAND, hand3d);
+					context.getJointPositionSkeleton(key, SimpleOpenNI.SKEL_RIGHT_HAND, hand3d);
 					context.convertRealWorldToProjective(hand3d, hand2d);
 					model.getPlayers().get(key).setPosition(hand2d);
-					if(model.getPlayers().get(key).recognizeGesture(hand3d)){
+					if (model.getPlayers().get(key).recognizeGesture(hand3d)) {
 						System.out.println("pushed! " + System.currentTimeMillis());
 						notifyPushListeners(hand2d, model.getPlayers().get(key));
 					}
-				}	
+				}
 			}
 		}
 	}
-	
-	public PImage getDepthImage(){
-		if(inputMode == InputMode.KINECT){
+
+	public PImage getDepthImage() {
+		if (inputMode == InputMode.KINECT) {
 			return (PImage) context.depthImage();
 		} else {
 			return null;
@@ -75,7 +76,7 @@ public class InputControl implements MouseMotionListener, MouseListener{
 		if (successfull) {
 			System.out.println("successful, id: " + id);
 			context.startTrackingSkeleton(id);
-			model.addPlayer(id);			
+			model.addPlayer(id);
 		}
 	}
 
@@ -86,22 +87,22 @@ public class InputControl implements MouseMotionListener, MouseListener{
 	}
 
 	public boolean isKinect() {
-		if(inputMode == InputMode.KINECT){
+		if (inputMode == InputMode.KINECT) {
 			return true;
 		}
 		return false;
 	}
-	
-	public int[] getPlayerPixels(int id){
+
+	public int[] getPlayerPixels(int id) {
 		return context.getUsersPixels(id);
 	}
 
-	public void addPushListener(PushListener listener){
+	public void addPushListener(PushListener listener) {
 		listeners.add(listener);
 	}
-	
-	private void notifyPushListeners(PVector vector, Player player){
-		for(PushListener listener:listeners){
+
+	private void notifyPushListeners(PVector vector, Player player) {
+		for (PushListener listener : listeners) {
 			listener.pushed(vector, player);
 		}
 	}
@@ -109,7 +110,7 @@ public class InputControl implements MouseMotionListener, MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -120,25 +121,25 @@ public class InputControl implements MouseMotionListener, MouseListener{
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

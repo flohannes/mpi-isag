@@ -15,7 +15,6 @@ public class MainApplet extends PApplet {
 	private static final long serialVersionUID = 3497175479855519829L;
 	private int windowWidth = 640;
 	private int windowHeight = 480;
-	private PImage soniImage;
 	private InputControl input;
 	private GamingModel model;
 	private GamingView gView;
@@ -43,15 +42,15 @@ public class MainApplet extends PApplet {
 		// model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
 		viewState = ViewState.STARTMENU;
-		
-		for(Button btn:model.getMulitplayerButtons()){
+
+		for (Button btn : model.getMulitplayerButtons()) {
 			btn.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(Button button) {
-					if(button.getText().equals("Co-op")){
+					if (button.getText().equals("Co-op")) {
 						viewState = ViewState.COOP;
-					} else if(button.getText().equals("PvP")){
+					} else if (button.getText().equals("PvP")) {
 						viewState = ViewState.PVP;
 					}
 				}
@@ -107,7 +106,7 @@ public class MainApplet extends PApplet {
 
 		paintEnemies();
 		paintPlayerCrosshairs();
-		if(model.getPlayers().size() == 0){
+		if (model.getPlayers().size() == 0) {
 			paintKinectImage();
 		}
 	}
@@ -176,7 +175,7 @@ public class MainApplet extends PApplet {
 	public static PImage getZielscheibeGruen() {
 		return zielscheibeGruen;
 	}
-	
+
 	public static PImage getZielscheibeBlau() {
 		return zielscheibeBlau;
 	}
