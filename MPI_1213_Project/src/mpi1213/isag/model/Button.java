@@ -10,44 +10,42 @@ public class Button {
 	private String text;
 	private boolean isVisible = true;
 	private PImage image;
-	
-	
+
 	public Button(int x, int y, int width, int height, String text, PImage image) {
 		this.position = new PVector(x, y);
 		this.width = width;
 		this.height = height;
 		this.text = text;
 		this.image = image;
-		if(image != null){
+		if (image != null) {
 			image.resize(width, height);
 		}
 	}
-	
-	public void setOnClickListener(OnClickListener listener){
+
+	public void setOnClickListener(OnClickListener listener) {
 		this.listener = listener;
 	}
-	
-	public boolean evaluateClick(PVector vector){
-		if(isVisible && isHit(vector)){
+
+	public boolean evaluateClick(PVector vector) {
+		if (isVisible && isHit(vector)) {
 			click();
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	private boolean isHit(PVector vector) {
-		return vector.x >= position.x && vector.x <= (position.x + width)
-				&& vector.y >= position.y && vector.y <= (position.y + height);
+		return vector.x >= position.x && vector.x <= (position.x + width) && vector.y >= position.y && vector.y <= (position.y + height);
 	}
-	
-	private void click(){
-		if(listener != null){
+
+	private void click() {
+		if (listener != null) {
 			listener.onClick(this);
 		}
 	}
-	
-	public String getText(){
+
+	public String getText() {
 		return this.text;
 	}
 
@@ -82,12 +80,12 @@ public class Button {
 	public void setPosition(PVector position) {
 		this.position = position;
 	}
-	
-	public PImage getImage(){
+
+	public PImage getImage() {
 		return image;
 	}
-	
-	public void setImage(PImage image){
+
+	public void setImage(PImage image) {
 		this.image = image;
 		image.resize(width, height);
 	}

@@ -36,9 +36,9 @@ public class GamingView {
 	}
 
 	private void drawSingleplayer() {
-		for (Integer key:model.getPlayers().keySet()) {
+		for (Integer key : model.getPlayers().keySet()) {
 			// Player 1
-			mainApplet.text("Player "+key, 20, 20);
+			mainApplet.text("Player " + key, 20, 20);
 			// Bullets
 			int bulletStartX;
 			if (model.getReloadButtons().get(key).getPosition().x > mainApplet.getWidth() / 2) {
@@ -46,15 +46,15 @@ public class GamingView {
 			} else {
 				bulletStartX = 0;
 			}
-			for(int j =0; j< model.getPlayers().get(key).getMunition();j++){
+			for (int j = 0; j < model.getPlayers().get(key).getMunition(); j++) {
 				int x1 = bulletStartX + j * (mainApplet.getAmmo().width + 1);
 				int y1 = 28;
 				mainApplet.image(mainApplet.getAmmo(), x1, y1);
 			}
-			if(model.getPlayers().get(key).getMunition() <= 0 && mainApplet.millis()%3 == 0){
+			if (model.getPlayers().get(key).getMunition() <= 0 && mainApplet.millis() % 3 == 0) {
 				mainApplet.textSize(30);
-				mainApplet.fill(255,0,0);
-				mainApplet.text("R E L O A D", bulletStartX+26, 55);
+				mainApplet.fill(255, 0, 0);
+				mainApplet.text("R E L O A D", bulletStartX + 26, 55);
 				mainApplet.textSize(12);
 			}
 			// Missed shoots

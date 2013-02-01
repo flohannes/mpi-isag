@@ -44,7 +44,7 @@ public class GamingModel implements PushListener {
 			players.put(id, new Player());
 			// player button
 			PImage buttonImage;
-			if(players.size() == 1){
+			if (players.size() == 1) {
 				buttonImage = MainApplet.getZielscheibeRot();
 			} else {
 				buttonImage = MainApplet.getZielscheibeBlau();
@@ -96,7 +96,7 @@ public class GamingModel implements PushListener {
 
 		for (Button btn : playerButtons.values()) {
 			btn.evaluateClick(vector);
-			if(player.isReady()){
+			if (player.isReady()) {
 				btn.setImage(MainApplet.getZielscheibeGruen());
 			}
 		}
@@ -104,7 +104,7 @@ public class GamingModel implements PushListener {
 		for (Button btn : reloadButtons.values()) {
 			btn.evaluateClick(vector);
 		}
-		
+
 		for (Button btn : multiplayerButtons) {
 			btn.evaluateClick(vector);
 		}
@@ -150,7 +150,7 @@ public class GamingModel implements PushListener {
 			counter++;
 		}
 	}
-	
+
 	public Map<Integer, ReloadButton> getReloadButtons() {
 		return reloadButtons;
 	}
