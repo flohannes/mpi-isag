@@ -1,5 +1,6 @@
 package mpi1213.isag.model;
 
+import processing.core.PImage;
 import processing.core.PVector;
 
 public class Button {
@@ -8,16 +9,18 @@ public class Button {
 	private OnClickListener listener;
 	private String text;
 	private boolean isVisible = true;
+	private PImage image;
 	
-	public Button(PVector position, int width, int height, String text) {
-		this.position = position;
+	
+	public Button(int x, int y, int width, int height, String text, PImage image) {
+		this.position = new PVector(x, y);
 		this.width = width;
 		this.height = height;
 		this.text = text;
-	}
-	
-	public Button(int x, int y, int width, int height, String text) {
-		this(new PVector(x,y), width, height, text);
+		this.image = image;
+		if(image != null){
+			image.resize(width, height);
+		}
 	}
 	
 	public void setOnClickListener(OnClickListener listener){
@@ -78,5 +81,14 @@ public class Button {
 
 	public void setPosition(PVector position) {
 		this.position = position;
+	}
+	
+	public PImage getImage(){
+		return image;
+	}
+	
+	public void setImage(PImage image){
+		this.image = image;
+		image.resize(width, height);
 	}
 }

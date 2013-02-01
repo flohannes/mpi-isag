@@ -68,8 +68,8 @@ public class Player implements OnClickListener{
 	public void onClick(Button button) {
 		if(button instanceof ReloadButton){
 			reloadMunition();
-		} else {
-			isReady = true;
+		} else if (button instanceof PlayerButton){
+			isReady = !isReady;
 		}
 	}
 	public PVector getShoot() {

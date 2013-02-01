@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mpi1213.isag.main.MainApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 public class GamingModel implements PushListener {
@@ -15,6 +17,7 @@ public class GamingModel implements PushListener {
 	private List<Enemy> enemies;
 	private Map<Integer, Button> playerButtons;
 	private Map<Integer, ReloadButton> reloadButtons;
+	private List<Button> multiplayerButtons;
 	private int width, height;
 
 	public GamingModel(int width, int height) {
@@ -22,8 +25,12 @@ public class GamingModel implements PushListener {
 		enemies = new ArrayList<Enemy>();
 		playerButtons = new HashMap<Integer, Button>();
 		reloadButtons = new HashMap<Integer, ReloadButton>();
+		multiplayerButtons = new ArrayList<Button>();
+		multiplayerButtons.add(new Button(0, 0, 100, 100, "Co-op", null));
+		multiplayerButtons.add(new Button(0, 0, 100, 100, "PvP", null));
 		this.width = width;
 		this.height = height;
+		updateMultiplayerButtonLayout();
 	}
 
 	public void removePlayer(int id) {
@@ -36,17 +43,23 @@ public class GamingModel implements PushListener {
 		if (players.size() < MAX_PLAYERS) {
 			players.put(id, new Player());
 			// player button
-			Button button = new Button(0, 0, 100, 100, "Player " + players.size());
-			button.setOnClickListener(players.get(id));
-			playerButtons.put(id, button);
+			PImage buttonImage;
+			if(players.size() == 1){
+				buttonImage = MainApplet.getZielscheibeRot();
+			} else {
+				buttonImage = MainApplet.getZielscheibeBlau();
+			}
+			PlayerButton pButton = new PlayerButton(0, 0, 100, 100, "Player " + players.size(), buttonImage);
+			pButton.setOnClickListener(players.get(id));
+			playerButtons.put(id, pButton);
 
 			// reload button
 			ReloadButton rButton;
 			String text = "Reload (P" + players.size() + ")";
 			if (players.get(id).getPosition().x < width / 2) {
-				rButton = new ReloadButton(10, height - 50, 40, 40, text);
+				rButton = new ReloadButton(10, height - 50, 40, 40, text, null);
 			} else {
-				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text);
+				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text, null);
 			}
 			rButton.setOnClickListener(players.get(id));
 			reloadButtons.put(id, rButton);
@@ -69,12 +82,12 @@ public class GamingModel implements PushListener {
 				enemies.remove(i);
 				// points von player hinzufuegen
 				player.setPoints(player.getPoints() + 10);
-				//add enemy
+				// add enemy
 				enemies.add(new Enemy(this.width, this.height));
 			}
 			counter++;
 		}
-		
+
 		if (counter == enemies.size() && player.getMunition() > 0) {
 			player.setShoot(vector);
 		}
@@ -83,9 +96,16 @@ public class GamingModel implements PushListener {
 
 		for (Button btn : playerButtons.values()) {
 			btn.evaluateClick(vector);
+			if(player.isReady()){
+				btn.setImage(MainApplet.getZielscheibeGruen());
+			}
 		}
 
 		for (Button btn : reloadButtons.values()) {
+			btn.evaluateClick(vector);
+		}
+		
+		for (Button btn : multiplayerButtons) {
 			btn.evaluateClick(vector);
 		}
 	}
@@ -122,7 +142,20 @@ public class GamingModel implements PushListener {
 		}
 	}
 
+	private void updateMultiplayerButtonLayout() {
+		int factor = multiplayerButtons.size() + 1;
+		int counter = 1;
+		for (Button btn : multiplayerButtons) {
+			btn.setPosition(new PVector(counter * (width / factor) - (btn.getWidth() / 2), 2 * height / 3));
+			counter++;
+		}
+	}
+	
 	public Map<Integer, ReloadButton> getReloadButtons() {
 		return reloadButtons;
+	}
+
+	public List<Button> getMulitplayerButtons() {
+		return multiplayerButtons;
 	}
 }

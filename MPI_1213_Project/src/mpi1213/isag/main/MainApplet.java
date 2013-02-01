@@ -1,8 +1,9 @@
 package mpi1213.isag.main;
 
 import mpi1213.isag.controller.InputControl;
-import mpi1213.isag.model.Enemy;
+import mpi1213.isag.model.Button;
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.model.OnClickListener;
 import mpi1213.isag.view.GamingView;
 import mpi1213.isag.view.MenuView;
 import mpi1213.isag.view.ViewState;
@@ -20,8 +21,10 @@ public class MainApplet extends PApplet {
 	private GamingView gView;
 	private PImage backgroundImg;
 	private PImage ammo;
-	private PImage zielscheibeRot;
-	private PImage zielscheibeGruen;
+	// images
+	private static PImage zielscheibeRot;
+	private static PImage zielscheibeGruen;
+	private static PImage zielscheibeBlau;
 	private static PImage alien1;
 	private static PImage alien2;
 	private static PImage alien3;
@@ -34,24 +37,41 @@ public class MainApplet extends PApplet {
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
-		// Images
+		initImages();
+
+		model = new GamingModel(this.getWidth(), this.getHeight());
+		// model.addDemoEnemies(this.width, this.height);
+		input = new InputControl(this, model);
+		viewState = ViewState.STARTMENU;
+		
+		for(Button btn:model.getMulitplayerButtons()){
+			btn.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(Button button) {
+					if(button.getText().equals("Co-op")){
+						viewState = ViewState.COOP;
+					} else if(button.getText().equals("PvP")){
+						viewState = ViewState.PVP;
+					}
+				}
+			});
+		}
+	}
+
+	private void initImages() {
 		backgroundImg = loadImage("Images/sternenhimmel.jpg");
 		backgroundImg.resize(windowWidth, windowHeight);
 		ammo = loadImage("Images/ammo.png");
 		ammo.resize(windowWidth / 45, 0);
+		zielscheibeBlau = loadImage("Images/target_blue.png");
 		zielscheibeRot = loadImage("Images/target_red.png");
-		zielscheibeRot.resize(windowWidth / 10, 0);
 		zielscheibeGruen = loadImage("Images/target_green.png");
 		// static alien images
 		alien1 = loadImage("Images/alien_01.png");
 		alien2 = loadImage("Images/alien_02.png");
 		alien3 = loadImage("Images/alien_03.png");
 		alien4 = loadImage("Images/alien_04.png");
-
-		model = new GamingModel(this.getWidth(), this.getHeight());
-		// model.addDemoEnemies(this.width, this.height);
-		input = new InputControl(this, model);
-		viewState = ViewState.STARTMENU;
 	}
 
 	public void draw() {
@@ -60,7 +80,6 @@ public class MainApplet extends PApplet {
 
 		fill(255);
 		input.update();
-		// paintKinectImage();
 		paintPlayerShapes();
 
 		switch (viewState) {
@@ -79,19 +98,26 @@ public class MainApplet extends PApplet {
 		case SINGLEPLAYER:
 			gView.drawGame();
 			break;
+		case MULTIPLAYERMENU:
+			MenuView.drawMultiplayerMenu(this, model);
+			break;
 		default:
 			break;
 		}
 
 		paintEnemies();
 		paintPlayerCrosshairs();
+		if(model.getPlayers().size() == 0){
+			paintKinectImage();
+		}
 	}
 
 	private void paintEnemies() {
-		for(int i = 0; i < model.getEnemies().size(); i++){
+		for (int i = 0; i < model.getEnemies().size(); i++) {
 			model.getEnemies().get(i).move(this.getWidth(), this.getHeight());
 			fill(model.getEnemies().get(i).getR(), model.getEnemies().get(i).getG(), model.getEnemies().get(i).getB());
-			rect(model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY(), model.getEnemies().get(i).getWidth(), model.getEnemies().get(i).getHeight());
+			rect(model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY(), model.getEnemies().get(i).getWidth(), model.getEnemies().get(i)
+					.getHeight());
 			image(model.getEnemies().get(i).getImage(), model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY());
 		}
 	}
@@ -143,12 +169,16 @@ public class MainApplet extends PApplet {
 		return ammo;
 	}
 
-	public PImage getZielscheibeRot() {
+	public static PImage getZielscheibeRot() {
 		return zielscheibeRot;
 	}
 
-	public PImage getZielscheibeGruen() {
+	public static PImage getZielscheibeGruen() {
 		return zielscheibeGruen;
+	}
+	
+	public static PImage getZielscheibeBlau() {
+		return zielscheibeBlau;
 	}
 
 	public static PImage getRandomAlienImage() {
