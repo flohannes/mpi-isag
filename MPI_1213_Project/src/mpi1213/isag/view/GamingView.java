@@ -1,5 +1,6 @@
 package mpi1213.isag.view;
 
+import mpi1213.isag.main.ImageContainer;
 import mpi1213.isag.main.MainApplet;
 import mpi1213.isag.model.GamingModel;
 import mpi1213.isag.model.ReloadButton;
@@ -47,9 +48,9 @@ public class GamingView {
 				bulletStartX = 0;
 			}
 			for (int j = 0; j < model.getPlayers().get(key).getMunition(); j++) {
-				int x1 = bulletStartX + j * (mainApplet.getAmmo().width + 1);
+				int x1 = bulletStartX + j * (ImageContainer.ammoImage.width + 1);
 				int y1 = 28;
-				mainApplet.image(mainApplet.getAmmo(), x1, y1);
+				mainApplet.image(ImageContainer.ammoImage, x1, y1);
 			}
 			if (model.getPlayers().get(key).getMunition() <= 0 && mainApplet.millis() % 3 == 0) {
 				mainApplet.textSize(30);
@@ -70,19 +71,6 @@ public class GamingView {
 			// Points
 			mainApplet.text(model.getPlayers().get(key).getPoints(), 20, 100);
 		}
-		/*
-		 * //Player 1 mainApplet.text("Player 1", 20, 20); //Bullets for(int i
-		 * =0; i< model.getPlayers().get(1).getMunition();i++){ int x1 = i * 10;
-		 * int y1 = 30; int x2 = 8; int y2 = 15; mainApplet.rect(x1,y1,x2,y2); }
-		 * //Missed shoots if(model.getPlayers().get(1).getShoot() != null){
-		 * if(model.getPlayers().get(1).getShoot().z > 0){
-		 * mainApplet.fill(255,0,0);
-		 * mainApplet.rect(model.getPlayers().get(1).getShoot().x,
-		 * model.getPlayers().get(1).getShoot().y, 3,3);
-		 * model.getPlayers().get(1).decreaseShoot(); } } mainApplet.fill(255);
-		 * // Points mainApplet.text(model.getPlayers().get(1).getPoints(), 20,
-		 * 100);
-		 */
 
 		// Time
 		if ((int) (time / 60) < 6) {

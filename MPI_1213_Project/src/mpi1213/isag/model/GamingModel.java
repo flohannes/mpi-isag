@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import mpi1213.isag.main.ImageContainer;
 import mpi1213.isag.main.MainApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -31,6 +32,7 @@ public class GamingModel implements PushListener {
 		this.width = width;
 		this.height = height;
 		updateMultiplayerButtonLayout();
+		setVisibilityMultiplayerButtons(false);
 	}
 
 	public void removePlayer(int id) {
@@ -45,9 +47,9 @@ public class GamingModel implements PushListener {
 			// player button
 			PImage buttonImage;
 			if (players.size() == 1) {
-				buttonImage = MainApplet.getZielscheibeRot();
+				buttonImage = ImageContainer.zielscheibeRot;
 			} else {
-				buttonImage = MainApplet.getZielscheibeBlau();
+				buttonImage = ImageContainer.zielscheibeBlau;
 			}
 			PlayerButton pButton = new PlayerButton(0, 0, 100, 100, "Player " + players.size(), buttonImage);
 			pButton.setOnClickListener(players.get(id));
@@ -79,7 +81,7 @@ public class GamingModel implements PushListener {
 		int counter = 0;
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && player.getMunition() > 0) {
-				enemies.remove(i);
+				removeEnemy(enemies.get(i));
 				// points von player hinzufuegen
 				player.setPoints(player.getPoints() + 10);
 				// add enemy
@@ -97,7 +99,7 @@ public class GamingModel implements PushListener {
 		for (Button btn : playerButtons.values()) {
 			btn.evaluateClick(vector);
 			if (player.isReady()) {
-				btn.setImage(MainApplet.getZielscheibeGruen());
+				btn.setImage(ImageContainer.zielscheibeGruen);
 			}
 		}
 
@@ -157,5 +159,36 @@ public class GamingModel implements PushListener {
 
 	public List<Button> getMulitplayerButtons() {
 		return multiplayerButtons;
+	}
+	
+	public void setVisibilityMultiplayerButtons(boolean visibility){
+		for(Button btn:multiplayerButtons){
+			btn.setVisible(visibility);
+		}
+	}
+	
+	public void setVisibilityPlayerButtons(boolean visibility){
+		for(Button btn:playerButtons.values()){
+			btn.setVisible(visibility);
+		}
+	}
+	
+	private void removeEnemy(Enemy enemy){
+		enemy.destroy();
+		try {
+			enemy.setImage((PImage) ImageContainer.explosion.clone());
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void update() {
+		for(int i = 0; i < enemies.size(); i++){
+			if(enemies.get(i).getState() == EnemyState.TO_BE_REMOVED){
+				enemies.remove(i);
+			} else {
+				enemies.get(i).update();
+			}
+		}
 	}
 }
