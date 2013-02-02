@@ -89,4 +89,11 @@ public class Button {
 		this.image = image;
 		image.resize(width, height);
 	}
+	
+	public boolean isListener(OnClickListener object) {
+		if(listener.equals(object)){
+			return true;
+		}
+		return false;
+	}
 }

@@ -33,14 +33,16 @@ public class Enemy {
 	private float g = 100;
 	private float b = 100;
 
-	public Enemy(int width, int height) {
+	public Enemy(int windowWidth, int windowHeight) {
 		double deltaX, deltaY;
 		deltaX = (Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1)) * getRandomDirection();
 		deltaY = (Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1)) * getRandomDirection();
 
-		init(Math.random() * width, Math.random() * height, Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1),
+		init(Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1),
 				Enemy.MIN_WIDTH + Math.random() * (Enemy.MAX_WIDTH - Enemy.MIN_WIDTH + 1), deltaX, deltaY, 10 + (float) Math.random() * (255 - 10),
 				(float) Math.random() * (255 - 10), (float) Math.random() * (255 - 10));
+		this.xPos = (int)(Math.random() * (windowWidth - this.width/2));
+		this.yPos = (int)(Math.random() * (windowHeight - this.height/2));		
 	}
 
 	private double getRandomDirection() {
@@ -51,9 +53,7 @@ public class Enemy {
 		}
 	}
 
-	private void init(double x, double y, double width, double height, double deltaX, double deltaY, float r, float g, float b) {
-		this.xPos = (int) x;
-		this.yPos = (int) y;
+	private void init(double width, double height, double deltaX, double deltaY, float r, float g, float b) {
 		this.width = (int) width;
 		this.height = (int) height;
 		this.deltaX = (int) deltaX;
@@ -77,9 +77,11 @@ public class Enemy {
 		yPos += deltaY;
 
 		if (xPos < -(width/2) || xPos > (windowWidth - width/2)) {
+			xPos -= deltaX;
 			deltaX = -deltaX;
 		}
 		if (yPos < -(height/2) || yPos > (windowHeight - height/2)) {
+			yPos -= deltaY;
 			deltaY = -deltaY;
 		}
 	}

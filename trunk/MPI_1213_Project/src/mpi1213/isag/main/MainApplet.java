@@ -45,14 +45,20 @@ public class MainApplet extends PApplet {
 				}
 			});
 		}
+		System.out.println(color(255,0,0));
+		System.out.println(color(0,0,255));
 	}
 
 	public void draw() {
+		input.update();
 		background(0);
+		if (model.getPlayers().size() == 0) {
+			paintKinectImage();
+			return;
+		}
 		image(ImageContainer.backgroundImage, 0, 0);
 
 		fill(255);
-		input.update();
 		viewState = model.update(viewState);
 		paintPlayerShapes();
 		
@@ -90,9 +96,6 @@ public class MainApplet extends PApplet {
 		}
 
 		paintPlayerCrosshairs();
-		if (model.getPlayers().size() == 0) {
-			paintKinectImage();
-		}
 	}
 
 	private void paintEnemies() {
@@ -107,18 +110,20 @@ public class MainApplet extends PApplet {
 	private void paintKinectImage() {
 		if (input.isKinect()) {
 			image(input.getDepthImage(), 0, 0);
-			tint(100);
+			//tint(100);
 		}
 	}
 
 	private void paintPlayerShapes() {
 		for (Integer key : model.getPlayers().keySet()) {
+			int color = model.getPlayers().get(key).getShapeColor();
 			if (input.isKinect()) {
 				int playerPixels[] = input.getPlayerPixels(key);
 				loadPixels();
 				for (int i = 0; i < playerPixels.length; i++) {
 					if (playerPixels[i] != 0 && playerPixels[i] == key) {
-						pixels[i] = color(key * 75 + 25, 100 + 25, 0 + 25);
+						//pixels[i] = color(key * 75 + 25, 100 + 25, 0 + 25);
+						pixels[i] = color;
 					}
 				}
 				updatePixels();
