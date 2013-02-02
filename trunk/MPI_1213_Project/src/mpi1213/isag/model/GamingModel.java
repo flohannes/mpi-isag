@@ -7,24 +7,27 @@ import java.util.List;
 import java.util.Map;
 
 import mpi1213.isag.main.ImageContainer;
-import mpi1213.isag.main.MainApplet;
+import mpi1213.isag.view.ViewState;
 import processing.core.PImage;
 import processing.core.PVector;
 
 public class GamingModel implements PushListener {
 	private static final int MAX_PLAYERS = 2;
+	private static final long GAME_SESSION_TIME = 5000;//in ms
+	private static final int INITIAL_ENEMY_COUNT = 6;
 
 	private Map<Integer, Player> players;
 	private List<Enemy> enemies;
-	private Map<Integer, Button> playerButtons;
+	private Map<Integer, PlayerButton> playerButtons;
 	private Map<Integer, ReloadButton> reloadButtons;
 	private List<Button> multiplayerButtons;
 	private int width, height;
+	private long startTime = 0;
 
 	public GamingModel(int width, int height) {
 		players = new HashMap<Integer, Player>();
 		enemies = new ArrayList<Enemy>();
-		playerButtons = new HashMap<Integer, Button>();
+		playerButtons = new HashMap<Integer, PlayerButton>();
 		reloadButtons = new HashMap<Integer, ReloadButton>();
 		multiplayerButtons = new ArrayList<Button>();
 		multiplayerButtons.add(new Button(0, 0, 100, 100, "Co-op", null));
@@ -96,10 +99,10 @@ public class GamingModel implements PushListener {
 
 		player.setMunition(player.getMunition() - 1);
 
-		for (Button btn : playerButtons.values()) {
+		for (PlayerButton btn : playerButtons.values()) {
 			btn.evaluateClick(vector);
 			if (player.isReady()) {
-				btn.setImage(ImageContainer.zielscheibeGruen);
+				btn.checkButton();
 			}
 		}
 
@@ -112,9 +115,9 @@ public class GamingModel implements PushListener {
 		}
 	}
 
-	public void addDemoEnemies(int windowWidth, int windowHeight) {
-
-		for (int i = 0; i < 5; i++) {
+	public void addInitialEnemies(int windowWidth, int windowHeight) {
+		enemies = new ArrayList<Enemy>();
+		for (int i = 0; i < INITIAL_ENEMY_COUNT; i++) {
 			enemies.add(new Enemy(this.width, this.height));
 		}
 	}
@@ -123,11 +126,11 @@ public class GamingModel implements PushListener {
 		return enemies;
 	}
 
-	public Collection<Button> getPlayerButtons() {
+	public Collection<PlayerButton> getPlayerButtons() {
 		return playerButtons.values();
 	}
 
-	public boolean allPlayerReady() {
+	public boolean allPlayersReady() {
 		boolean result = true;
 		for (Player player : players.values()) {
 			result = result && player.isReady();
@@ -182,13 +185,50 @@ public class GamingModel implements PushListener {
 		}
 	}
 
-	public void update() {
+	public ViewState update(ViewState viewState) {
 		for(int i = 0; i < enemies.size(); i++){
 			if(enemies.get(i).getState() == EnemyState.TO_BE_REMOVED){
 				enemies.remove(i);
 			} else {
-				enemies.get(i).update();
+				enemies.get(i).update(this.width, this.height);
 			}
 		}
+		switch(viewState){
+		case SINGLEPLAYER:
+			if(!isGameRunning()){
+				setVisibilityPlayerButtons(true);
+				return ViewState.STARTMENU;
+			}
+			break;
+		default:
+			break;
+		}
+		return viewState;
+	}
+
+	public boolean isGameRunning() {
+		if((GAME_SESSION_TIME - (System.currentTimeMillis() - startTime)) > 0){
+			return true;
+		}
+		return false;
+	}
+	
+	public void startGame(){
+		startTime = System.currentTimeMillis();
+		addInitialEnemies(width, height);
+		//reset playerReady-flag and munition
+		for(Integer key:players.keySet()){
+			players.get(key).setReady(false);
+			playerButtons.get(key).uncheckButton();
+			players.get(key).reloadMunition();
+		}
+	}
+	
+	/**
+	 * 
+	 * @return time in s
+	 */
+	public long getGameTime(){
+		return (GAME_SESSION_TIME - (System.currentTimeMillis() - startTime)) / 1000;
 	}
 }

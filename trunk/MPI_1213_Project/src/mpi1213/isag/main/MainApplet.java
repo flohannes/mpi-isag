@@ -8,7 +8,6 @@ import mpi1213.isag.view.GamingView;
 import mpi1213.isag.view.MenuView;
 import mpi1213.isag.view.ViewState;
 import processing.core.PApplet;
-import processing.core.PImage;
 import processing.core.PVector;
 
 public class MainApplet extends PApplet {
@@ -54,36 +53,42 @@ public class MainApplet extends PApplet {
 
 		fill(255);
 		input.update();
-		model.update();
+		viewState = model.update(viewState);
 		paintPlayerShapes();
-
+		
 		switch (viewState) {
 		case STARTMENU:
 			MenuView.drawMainMenu(this, model);
-			if (model.allPlayerReady()) {
+			if (model.allPlayersReady()) {
 				if (model.getPlayers().size() == 1) {
 					viewState = ViewState.SINGLEPLAYER;
-					model.addDemoEnemies(this.getWidth(), this.getHeight());
 					gView = new GamingView(viewState, this, model);
 				} else if (model.getPlayers().size() == 2) {
 					viewState = ViewState.MULTIPLAYERMENU;
 					model.setVisibilityMultiplayerButtons(true);
 				}
+				model.startGame();
 				model.setVisibilityPlayerButtons(false);
 			}
 			break;
 		case SINGLEPLAYER:
+			paintEnemies();
 			gView.drawGame();
 			break;
 		case MULTIPLAYERMENU:
 			model.setVisibilityMultiplayerButtons(true);
 			MenuView.drawMultiplayerMenu(this, model);
 			break;
+		case COOP:
+			paintEnemies();
+			break;
+		case PVP:
+			paintEnemies();
+			break;
 		default:
 			break;
 		}
 
-		paintEnemies();
 		paintPlayerCrosshairs();
 		if (model.getPlayers().size() == 0) {
 			paintKinectImage();
@@ -92,7 +97,6 @@ public class MainApplet extends PApplet {
 
 	private void paintEnemies() {
 		for (int i = 0; i < model.getEnemies().size(); i++) {
-			model.getEnemies().get(i).move(this.getWidth(), this.getHeight());
 			fill(model.getEnemies().get(i).getR(), model.getEnemies().get(i).getG(), model.getEnemies().get(i).getB());
 //			rect(model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY(), model.getEnemies().get(i).getWidth(), model.getEnemies().get(i)
 //					.getHeight());
