@@ -18,16 +18,6 @@ public class MainApplet extends PApplet {
 	private InputControl input;
 	private GamingModel model;
 	private GamingView gView;
-	private PImage backgroundImg;
-	private PImage ammo;
-	// images
-	private static PImage zielscheibeRot;
-	private static PImage zielscheibeGruen;
-	private static PImage zielscheibeBlau;
-	private static PImage alien1;
-	private static PImage alien2;
-	private static PImage alien3;
-	private static PImage alien4;
 
 	ViewState viewState = ViewState.STARTMENU;
 
@@ -36,16 +26,15 @@ public class MainApplet extends PApplet {
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
-		initImages();
+		ImageContainer.initImages(this);
 
 		model = new GamingModel(this.getWidth(), this.getHeight());
-		// model.addDemoEnemies(this.width, this.height);
+		//model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
 		viewState = ViewState.STARTMENU;
 
 		for (Button btn : model.getMulitplayerButtons()) {
 			btn.setOnClickListener(new OnClickListener() {
-
 				@Override
 				public void onClick(Button button) {
 					if (button.getText().equals("Co-op")) {
@@ -53,32 +42,19 @@ public class MainApplet extends PApplet {
 					} else if (button.getText().equals("PvP")) {
 						viewState = ViewState.PVP;
 					}
+					model.setVisibilityMultiplayerButtons(false);
 				}
 			});
 		}
 	}
 
-	private void initImages() {
-		backgroundImg = loadImage("Images/sternenhimmel.jpg");
-		backgroundImg.resize(windowWidth, windowHeight);
-		ammo = loadImage("Images/ammo.png");
-		ammo.resize(windowWidth / 45, 0);
-		zielscheibeBlau = loadImage("Images/target_blue.png");
-		zielscheibeRot = loadImage("Images/target_red.png");
-		zielscheibeGruen = loadImage("Images/target_green.png");
-		// static alien images
-		alien1 = loadImage("Images/alien_01.png");
-		alien2 = loadImage("Images/alien_02.png");
-		alien3 = loadImage("Images/alien_03.png");
-		alien4 = loadImage("Images/alien_04.png");
-	}
-
 	public void draw() {
 		background(0);
-		image(backgroundImg, 0, 0);
+		image(ImageContainer.backgroundImage, 0, 0);
 
 		fill(255);
 		input.update();
+		model.update();
 		paintPlayerShapes();
 
 		switch (viewState) {
@@ -91,13 +67,16 @@ public class MainApplet extends PApplet {
 					gView = new GamingView(viewState, this, model);
 				} else if (model.getPlayers().size() == 2) {
 					viewState = ViewState.MULTIPLAYERMENU;
+					model.setVisibilityMultiplayerButtons(true);
 				}
+				model.setVisibilityPlayerButtons(false);
 			}
 			break;
 		case SINGLEPLAYER:
 			gView.drawGame();
 			break;
 		case MULTIPLAYERMENU:
+			model.setVisibilityMultiplayerButtons(true);
 			MenuView.drawMultiplayerMenu(this, model);
 			break;
 		default:
@@ -115,8 +94,8 @@ public class MainApplet extends PApplet {
 		for (int i = 0; i < model.getEnemies().size(); i++) {
 			model.getEnemies().get(i).move(this.getWidth(), this.getHeight());
 			fill(model.getEnemies().get(i).getR(), model.getEnemies().get(i).getG(), model.getEnemies().get(i).getB());
-			rect(model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY(), model.getEnemies().get(i).getWidth(), model.getEnemies().get(i)
-					.getHeight());
+//			rect(model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY(), model.getEnemies().get(i).getWidth(), model.getEnemies().get(i)
+//					.getHeight());
 			image(model.getEnemies().get(i).getImage(), model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY());
 		}
 	}
@@ -162,38 +141,5 @@ public class MainApplet extends PApplet {
 
 	public void onEndCalibration(int id, boolean successfull) {
 		input.endCalibration(id, successfull);
-	}
-
-	public PImage getAmmo() {
-		return ammo;
-	}
-
-	public static PImage getZielscheibeRot() {
-		return zielscheibeRot;
-	}
-
-	public static PImage getZielscheibeGruen() {
-		return zielscheibeGruen;
-	}
-
-	public static PImage getZielscheibeBlau() {
-		return zielscheibeBlau;
-	}
-
-	public static PImage getRandomAlienImage() {
-		int random = (int) (1 + Math.random() * (4 - 1 + 1));
-
-		switch (random) {
-		case 1:
-			return alien1;
-		case 2:
-			return alien2;
-		case 3:
-			return alien3;
-		case 4:
-			return alien4;
-		default:
-			return null;
-		}
 	}
 }
