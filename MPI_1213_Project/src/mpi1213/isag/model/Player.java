@@ -13,6 +13,7 @@ public class Player implements OnClickListener {
 	private int points;
 	private int munition;
 	private boolean isReady = false;
+	private int shapeColor = 1;
 
 	public Player() {
 		munition = 10;
@@ -89,5 +90,13 @@ public class Player implements OnClickListener {
 
 	public void setReady(boolean b) {
 		isReady = b;
+	}
+	
+	public void setShapeColor(int color){
+		shapeColor = color;
+	}
+
+	public int getShapeColor() {
+		return shapeColor;
 	}
 }

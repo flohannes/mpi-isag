@@ -8,8 +8,8 @@ import processing.core.PApplet;
 public class MenuView {
 
 	public static void drawMainMenu(MainApplet applet, GamingModel model) {
-		applet.text("I.S.A.G", applet.getWidth() / 2 - 20, 50);
-		applet.text("Please Shoot into the Target", applet.getWidth() / 2 - 60, 100);
+		applet.text("I.S.A.G", applet.getWidth() / 2, 50);
+		applet.text("Please Shoot into the Target", applet.getWidth() / 2, 100);
 
 		// draw buttons
 		for (Button btn : model.getPlayerButtons()) {
@@ -24,8 +24,8 @@ public class MenuView {
 	}
 
 	public static void drawMultiplayerMenu(MainApplet applet, GamingModel model) {
-		applet.text("I.S.A.G", applet.getWidth() / 2 - 20, 50);
-		applet.text("Please Shoot into the Target", applet.getWidth() / 2 - 60, 100);
+		applet.text("I.S.A.G", applet.getWidth() / 2, 50);
+		applet.text("Please Shoot into the Target", applet.getWidth() / 2, 100);
 		for (Button btn : model.getMulitplayerButtons()) {
 			if (btn.getImage() != null) {
 				applet.image(btn.getImage(), btn.getPosition().x, btn.getPosition().y);

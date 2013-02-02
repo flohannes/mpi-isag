@@ -23,6 +23,8 @@ public class GamingModel implements PushListener {
 	private List<Button> multiplayerButtons;
 	private int width, height;
 	private long startTime = 0;
+	private float gamePointSlope;
+	private float gamePointAbs = 100f;
 
 	public GamingModel(int width, int height) {
 		players = new HashMap<Integer, Player>();
@@ -36,6 +38,9 @@ public class GamingModel implements PushListener {
 		this.height = height;
 		updateMultiplayerButtonLayout();
 		setVisibilityMultiplayerButtons(false);
+		
+		//game points function
+		gamePointSlope = (0f - 100f) / ((float)width/2f * (float)height/2f - 0f);
 	}
 
 	public void removePlayer(int id) {
@@ -51,8 +56,10 @@ public class GamingModel implements PushListener {
 			PImage buttonImage;
 			if (players.size() == 1) {
 				buttonImage = ImageContainer.zielscheibeRot;
+				players.get(id).setShapeColor(-65536);
 			} else {
 				buttonImage = ImageContainer.zielscheibeBlau;
+				players.get(id).setShapeColor(-16776961);
 			}
 			PlayerButton pButton = new PlayerButton(0, 0, 100, 100, "Player " + players.size(), buttonImage);
 			pButton.setOnClickListener(players.get(id));
@@ -86,7 +93,7 @@ public class GamingModel implements PushListener {
 			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && player.getMunition() > 0) {
 				removeEnemy(enemies.get(i));
 				// points von player hinzufuegen
-				player.setPoints(player.getPoints() + 10);
+				player.increasePoints(getGamePoints(enemies.get(i).getWidth(), enemies.get(i).getHeight()));
 				// add enemy
 				enemies.add(new Enemy(this.width, this.height));
 			}
@@ -100,9 +107,11 @@ public class GamingModel implements PushListener {
 		player.setMunition(player.getMunition() - 1);
 
 		for (PlayerButton btn : playerButtons.values()) {
-			btn.evaluateClick(vector);
-			if (player.isReady()) {
-				btn.checkButton();
+			if(btn.isListener(player)){
+				btn.evaluateClick(vector);
+				if (player.isReady()) {
+					btn.checkButton();
+				}
 			}
 		}
 
@@ -221,6 +230,7 @@ public class GamingModel implements PushListener {
 			players.get(key).setReady(false);
 			playerButtons.get(key).uncheckButton();
 			players.get(key).reloadMunition();
+			players.get(key).setPoints(0);
 		}
 	}
 	
@@ -230,5 +240,9 @@ public class GamingModel implements PushListener {
 	 */
 	public long getGameTime(){
 		return (GAME_SESSION_TIME - (System.currentTimeMillis() - startTime)) / 1000;
+	}
+	
+	private int getGamePoints(float width, float height){
+		return (int)(gamePointSlope * (float)(width*height) + gamePointAbs);
 	}
 }
