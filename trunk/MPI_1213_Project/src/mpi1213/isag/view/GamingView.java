@@ -3,6 +3,7 @@ package mpi1213.isag.view;
 import mpi1213.isag.main.ImageContainer;
 import mpi1213.isag.main.MainApplet;
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.model.Player;
 import mpi1213.isag.model.ReloadButton;
 
 public class GamingView {
@@ -28,8 +29,10 @@ public class GamingView {
 		}
 	}
 
-	private void drawSingleplayer() {
+	private void drawSingleplayer() {				
 		for (Integer key : model.getPlayers().keySet()) {
+			
+			
 			// Player 1
 			mainApplet.text("Player " + key, 20, 20);
 			// Bullets
@@ -78,6 +81,32 @@ public class GamingView {
 		}
 	}
 
+	private void drawHUD(MainApplet applet){
+		if(model.getPlayers().size() == 2){
+			Player leftPlayer = null;
+			Player rightPlayer = null;
+			for(Player player:model.getPlayers().values()){
+				if(leftPlayer == null){
+					leftPlayer = player;
+				} else {
+					if(player.getHipPosition().x <= leftPlayer.getHipPosition().x){
+						rightPlayer = leftPlayer;
+						leftPlayer = player;
+					} else {
+						rightPlayer = player;
+					}
+				}
+			}
+			
+		} else if(model.getPlayers().size() == 1){
+			
+		}
+	}
+	
+	private void drawPlayerLeft(){
+		
+	}
+	
 	private void drawCOOP() {
 		// Player 1
 		mainApplet.text("Player 1", 20, 20);

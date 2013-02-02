@@ -18,8 +18,6 @@ public class MainApplet extends PApplet {
 	private GamingModel model;
 	private GamingView gView;
 
-	ViewState viewState = ViewState.STARTMENU;
-
 	public void setup() {
 		size(windowWidth, windowHeight);
 		fill(255, 0, 0, 128);
@@ -30,16 +28,15 @@ public class MainApplet extends PApplet {
 		model = new GamingModel(this.getWidth(), this.getHeight());
 		//model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
-		viewState = ViewState.STARTMENU;
 
 		for (Button btn : model.getMulitplayerButtons()) {
 			btn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(Button button) {
 					if (button.getText().equals("Co-op")) {
-						viewState = ViewState.COOP;
+						model.setViewState(ViewState.COOP);
 					} else if (button.getText().equals("PvP")) {
-						viewState = ViewState.PVP;
+						model.setViewState(ViewState.PVP);
 					}
 					model.setVisibilityMultiplayerButtons(false);
 				}
@@ -59,18 +56,18 @@ public class MainApplet extends PApplet {
 		image(ImageContainer.backgroundImage, 0, 0);
 
 		fill(255);
-		viewState = model.update(viewState);
+		model.update();
 		paintPlayerShapes();
 		
-		switch (viewState) {
+		switch (model.getViewState()) {
 		case STARTMENU:
 			MenuView.drawMainMenu(this, model);
 			if (model.allPlayersReady()) {
 				if (model.getPlayers().size() == 1) {
-					viewState = ViewState.SINGLEPLAYER;
-					gView = new GamingView(viewState, this, model);
+					model.setViewState(ViewState.SINGLEPLAYER);
+					gView = new GamingView(model.getViewState(), this, model);
 				} else if (model.getPlayers().size() == 2) {
-					viewState = ViewState.MULTIPLAYERMENU;
+					model.setViewState(ViewState.MULTIPLAYERMENU);
 					model.setVisibilityMultiplayerButtons(true);
 				}
 				model.startGame();
@@ -133,7 +130,7 @@ public class MainApplet extends PApplet {
 
 	private void paintPlayerCrosshairs() {
 		for (Integer key : model.getPlayers().keySet()) {
-			PVector pos = model.getPlayers().get(key).getPosition();
+			PVector pos = model.getPlayers().get(key).getTargetPosition();
 			fill(key * 75, 100, 0);
 			rect(pos.x - 50, pos.y - 5, 100, 10);
 			rect(pos.x - 5, pos.y - 50, 10, 100);

@@ -124,7 +124,9 @@ public class Enemy {
 	
 	public void setImage(PImage image) {
 		this.image = image;
-		this.image.resize(this.width, this.height);
+		if(image.width != width || image.height != height){
+			image.resize(width, height);
+		}
 	}
 	
 	public void destroy(){

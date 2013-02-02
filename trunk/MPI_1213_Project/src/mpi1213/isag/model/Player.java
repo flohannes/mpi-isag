@@ -8,6 +8,7 @@ public class Player implements OnClickListener {
 	private static int MAX_MUNITION = 10;
 
 	private PVector targetPosition = new PVector();
+	private PVector hipPosition;
 	private GestureRecognizer gestureRecognizer = new GestureRecognizer();
 	private PVector shoot;
 	private int points;
@@ -19,11 +20,11 @@ public class Player implements OnClickListener {
 		munition = 10;
 	}
 
-	public PVector getPosition() {
+	public PVector getTargetPosition() {
 		return targetPosition;
 	}
 
-	public void setPosition(PVector hand2d) {
+	public void setTargetPosition(PVector hand2d) {
 		targetPosition = hand2d;
 	}
 
@@ -98,5 +99,13 @@ public class Player implements OnClickListener {
 
 	public int getShapeColor() {
 		return shapeColor;
+	}
+
+	public PVector getHipPosition() {
+		return hipPosition;
+	}
+
+	public void setHipPosition(PVector hipPosition) {
+		this.hipPosition = hipPosition;
 	}
 }

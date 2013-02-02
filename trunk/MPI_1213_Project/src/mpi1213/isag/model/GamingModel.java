@@ -13,7 +13,7 @@ import processing.core.PVector;
 
 public class GamingModel implements PushListener {
 	private static final int MAX_PLAYERS = 2;
-	private static final long GAME_SESSION_TIME = 5000;//in ms
+	private static final long GAME_SESSION_TIME = 10000;// in ms
 	private static final int INITIAL_ENEMY_COUNT = 6;
 
 	private Map<Integer, Player> players;
@@ -25,6 +25,8 @@ public class GamingModel implements PushListener {
 	private long startTime = 0;
 	private float gamePointSlope;
 	private float gamePointAbs = 100f;
+
+	private ViewState viewState = ViewState.STARTMENU;
 
 	public GamingModel(int width, int height) {
 		players = new HashMap<Integer, Player>();
@@ -38,9 +40,9 @@ public class GamingModel implements PushListener {
 		this.height = height;
 		updateMultiplayerButtonLayout();
 		setVisibilityMultiplayerButtons(false);
-		
-		//game points function
-		gamePointSlope = (0f - 100f) / ((float)width/2f * (float)height/2f - 0f);
+
+		// game points function
+		gamePointSlope = (0f - 100f) / ((float) width / 2f * (float) height / 2f - 0f);
 	}
 
 	public void removePlayer(int id) {
@@ -68,7 +70,7 @@ public class GamingModel implements PushListener {
 			// reload button
 			ReloadButton rButton;
 			String text = "Reload (P" + players.size() + ")";
-			if (players.get(id).getPosition().x < width / 2) {
+			if (players.get(id).getTargetPosition().x < width / 2) {
 				rButton = new ReloadButton(10, height - 50, 40, 40, text, null);
 			} else {
 				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text, null);
@@ -94,8 +96,6 @@ public class GamingModel implements PushListener {
 				removeEnemy(enemies.get(i));
 				// points von player hinzufuegen
 				player.increasePoints(getGamePoints(enemies.get(i).getWidth(), enemies.get(i).getHeight()));
-				// add enemy
-				enemies.add(new Enemy(this.width, this.height));
 			}
 			counter++;
 		}
@@ -107,7 +107,7 @@ public class GamingModel implements PushListener {
 		player.setMunition(player.getMunition() - 1);
 
 		for (PlayerButton btn : playerButtons.values()) {
-			if(btn.isListener(player)){
+			if (btn.isListener(player)) {
 				btn.evaluateClick(vector);
 				if (player.isReady()) {
 					btn.checkButton();
@@ -147,12 +147,34 @@ public class GamingModel implements PushListener {
 		return result;
 	}
 
-	private void updatePlayerButtonLayout() {
+	public void updatePlayerButtonLayout() {
 		int factor = playerButtons.size() + 1;
 		int counter = 1;
-		for (Button btn : playerButtons.values()) {
-			btn.setPosition(new PVector(counter * (width / factor) - (btn.getWidth() / 2), 2 * height / 3));
-			counter++;
+
+		if (players.size() == 2) {
+			PlayerButton leftButton = null;
+			PlayerButton rightButton = null;
+			Player tempPlayer = null;
+			for (Integer key : players.keySet()) {
+				if (tempPlayer == null) {
+					tempPlayer = players.get(key);
+					leftButton = playerButtons.get(key);
+				} else {
+					if (players.get(key).getTargetPosition().x <= tempPlayer.getTargetPosition().x) {
+						rightButton = leftButton;
+						leftButton = playerButtons.get(key);
+					} else {
+						rightButton = playerButtons.get(key);
+					}
+				}
+			}
+			leftButton.setPosition(new PVector(1 * (width / factor) - (leftButton.getWidth() / 2), height / 2));
+			rightButton.setPosition(new PVector(2 * (width / factor) - (rightButton.getWidth() / 2), height / 2));
+		} else {
+			for (Button btn : playerButtons.values()) {
+				btn.setPosition(new PVector(counter * (width / factor) - (btn.getWidth() / 2), height / 2));
+				counter++;
+			}
 		}
 	}
 
@@ -172,20 +194,20 @@ public class GamingModel implements PushListener {
 	public List<Button> getMulitplayerButtons() {
 		return multiplayerButtons;
 	}
-	
-	public void setVisibilityMultiplayerButtons(boolean visibility){
-		for(Button btn:multiplayerButtons){
+
+	public void setVisibilityMultiplayerButtons(boolean visibility) {
+		for (Button btn : multiplayerButtons) {
 			btn.setVisible(visibility);
 		}
 	}
-	
-	public void setVisibilityPlayerButtons(boolean visibility){
-		for(Button btn:playerButtons.values()){
+
+	public void setVisibilityPlayerButtons(boolean visibility) {
+		for (Button btn : playerButtons.values()) {
 			btn.setVisible(visibility);
 		}
 	}
-	
-	private void removeEnemy(Enemy enemy){
+
+	private void removeEnemy(Enemy enemy) {
 		enemy.destroy();
 		try {
 			enemy.setImage((PImage) ImageContainer.explosion.clone());
@@ -194,55 +216,64 @@ public class GamingModel implements PushListener {
 		}
 	}
 
-	public ViewState update(ViewState viewState) {
-		for(int i = 0; i < enemies.size(); i++){
-			if(enemies.get(i).getState() == EnemyState.TO_BE_REMOVED){
+	public void update() {
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemies.get(i).getState() == EnemyState.TO_BE_REMOVED) {
 				enemies.remove(i);
+				// add enemy
+				enemies.add(new Enemy(this.width, this.height));
 			} else {
 				enemies.get(i).update(this.width, this.height);
 			}
 		}
-		switch(viewState){
+		switch (viewState) {
 		case SINGLEPLAYER:
-			if(!isGameRunning()){
+			if (!isGameRunning()) {
 				setVisibilityPlayerButtons(true);
-				return ViewState.STARTMENU;
+				viewState = ViewState.STARTMENU;
 			}
 			break;
 		default:
 			break;
 		}
-		return viewState;
 	}
 
 	public boolean isGameRunning() {
-		if((GAME_SESSION_TIME - (System.currentTimeMillis() - startTime)) > 0){
+		if ((GAME_SESSION_TIME - (System.currentTimeMillis() - startTime)) > 0) {
 			return true;
 		}
 		return false;
 	}
-	
-	public void startGame(){
+
+	public void startGame() {
 		startTime = System.currentTimeMillis();
 		addInitialEnemies(width, height);
-		//reset playerReady-flag and munition
-		for(Integer key:players.keySet()){
+		// reset playerReady-flag and munition
+		for (Integer key : players.keySet()) {
 			players.get(key).setReady(false);
 			playerButtons.get(key).uncheckButton();
 			players.get(key).reloadMunition();
 			players.get(key).setPoints(0);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return time in s
 	 */
-	public long getGameTime(){
+	public long getGameTime() {
 		return (GAME_SESSION_TIME - (System.currentTimeMillis() - startTime)) / 1000;
 	}
-	
-	private int getGamePoints(float width, float height){
-		return (int)(gamePointSlope * (float)(width*height) + gamePointAbs);
+
+	private int getGamePoints(float width, float height) {
+		return (int) (gamePointSlope * (float) (width * height) + gamePointAbs);
+	}
+
+	public ViewState getViewState() {
+		return viewState;
+	}
+
+	public void setViewState(ViewState viewState) {
+		this.viewState = viewState;
 	}
 }
