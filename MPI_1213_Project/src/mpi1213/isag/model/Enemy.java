@@ -1,7 +1,6 @@
 package mpi1213.isag.model;
 
 import mpi1213.isag.main.ImageContainer;
-import mpi1213.isag.main.MainApplet;
 import processing.core.PImage;
 
 public class Enemy {
@@ -77,10 +76,10 @@ public class Enemy {
 		xPos += deltaX;
 		yPos += deltaY;
 
-		if (xPos < 0 || xPos > windowWidth) {
+		if (xPos < -(width/2) || xPos > (windowWidth - width/2)) {
 			deltaX = -deltaX;
 		}
-		if (yPos < 0 || yPos > windowHeight) {
+		if (yPos < -(height/2) || yPos > (windowHeight - height/2)) {
 			deltaY = -deltaY;
 		}
 	}
@@ -140,7 +139,8 @@ public class Enemy {
 		return state;
 	}
 
-	public void update() {
+	public void update(int width, int height) {
+		move(width, height);
 		if(state == EnemyState.DESTROYED){
 			if(System.currentTimeMillis() > (destroyTime + DESTROY_TIMESPAN)){
 				state = EnemyState.TO_BE_REMOVED;

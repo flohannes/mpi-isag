@@ -9,31 +9,23 @@ public class GamingView {
 
 	private ViewState viewState;
 	private MainApplet mainApplet;
-	private int time;
 	private GamingModel model;
 
 	public GamingView(ViewState viewState, MainApplet mainApplet, GamingModel model) {
 		this.viewState = viewState;
 		this.mainApplet = mainApplet;
-		this.time = 60 * 60; // 60fps * 60sec Spielzeit
 		this.model = model;
 	}
 
 	public void drawGame() {
-		if (time > 0) {
-			// Je nach viewState das Game starten
-			if (ViewState.SINGLEPLAYER == viewState) {
-				this.drawSingleplayer();
-			} else if (ViewState.COOP == viewState) {
-				this.drawCOOP();
-			} else if (ViewState.PVP == viewState) {
-				this.drawPVP();
-			}
-		} else {
-			// viewState aendern und zum Highscore oder Hauptmenue
-			viewState = ViewState.STARTMENU;
+		// Je nach viewState das Game starten
+		if (ViewState.SINGLEPLAYER == viewState) {
+			this.drawSingleplayer();
+		} else if (ViewState.COOP == viewState) {
+			this.drawCOOP();
+		} else if (ViewState.PVP == viewState) {
+			this.drawPVP();
 		}
-
 	}
 
 	private void drawSingleplayer() {
@@ -73,14 +65,13 @@ public class GamingView {
 		}
 
 		// Time
-		if ((int) (time / 60) < 6) {
+		if (model.getGameTime() < 6) {
 			mainApplet.fill(255, 0, 0);
-			mainApplet.text("0 : " + (int) (time / 60), mainApplet.getWidth() / 2 - 20, 50);
+			mainApplet.text("0 : " + model.getGameTime(), mainApplet.getWidth() / 2 - 20, 50);
 		} else {
-			mainApplet.text("0 : " + (int) (time / 60), mainApplet.getWidth() / 2 - 20, 50);
+			mainApplet.text("0 : " + model.getGameTime(), mainApplet.getWidth() / 2 - 20, 50);
 		}
 		mainApplet.fill(255);
-		time--;
 		// Reload
 		for (ReloadButton rBtn : model.getReloadButtons().values()) {
 			mainApplet.rect(rBtn.getPosition().x, rBtn.getPosition().y, rBtn.getWidth(), rBtn.getHeight());
@@ -103,8 +94,8 @@ public class GamingView {
 		mainApplet.text(model.getPlayers().get(1).getPoints(), 550, 50);
 
 		// Time
-		mainApplet.text("0 : " + (int) (time / 60), mainApplet.getWidth() / 2 - 20, 50);
-		time--;// Reload P1
+		mainApplet.text("0 : " + model.getGameTime(), mainApplet.getWidth() / 2 - 20, 50);
+		// Reload P1
 
 		mainApplet.color(150 * 75 + 25, 100 + 25, 0 + 25);
 		mainApplet.rect(2, 2, 40, 20);
@@ -129,8 +120,7 @@ public class GamingView {
 		mainApplet.text(model.getPlayers().get(1).getPoints(), 550, 50);
 
 		// Time
-		mainApplet.text("0 : " + (int) (time / 60), mainApplet.getWidth() / 2 - 20, 50);
-		time--;
+		mainApplet.text("0 : " + model.getGameTime(), mainApplet.getWidth() / 2 - 20, 50);
 		// Trennline
 
 		// Reload P1

@@ -86,4 +86,8 @@ public class Player implements OnClickListener {
 	public void decreaseShoot() {
 		this.shoot.z--;
 	}
+
+	public void setReady(boolean b) {
+		isReady = b;
+	}
 }
