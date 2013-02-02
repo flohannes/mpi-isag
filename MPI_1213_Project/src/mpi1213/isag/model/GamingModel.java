@@ -13,7 +13,7 @@ import processing.core.PVector;
 
 public class GamingModel implements PushListener {
 	private static final int MAX_PLAYERS = 2;
-	private static final long GAME_SESSION_TIME = 10000;// in ms
+	private static final long GAME_SESSION_TIME = 5000;// in ms
 	private static final int INITIAL_ENEMY_COUNT = 6;
 
 	private Map<Integer, Player> players;
