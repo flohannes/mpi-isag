@@ -16,7 +16,6 @@ public class MainApplet extends PApplet {
 	private int windowHeight = 480;
 	private InputControl input;
 	private GamingModel model;
-	private GamingView gView;
 
 	public void setup() {
 		size(windowWidth, windowHeight);
@@ -26,7 +25,7 @@ public class MainApplet extends PApplet {
 		ImageContainer.initImages(this);
 
 		model = new GamingModel(this.getWidth(), this.getHeight());
-		//model.addDemoEnemies(this.width, this.height);
+		// model.addDemoEnemies(this.width, this.height);
 		input = new InputControl(this, model);
 
 		for (Button btn : model.getMulitplayerButtons()) {
@@ -42,8 +41,8 @@ public class MainApplet extends PApplet {
 				}
 			});
 		}
-		System.out.println(color(255,0,0));
-		System.out.println(color(0,0,255));
+		System.out.println(color(255, 0, 0));
+		System.out.println(color(0, 0, 255));
 	}
 
 	public void draw() {
@@ -58,14 +57,13 @@ public class MainApplet extends PApplet {
 		fill(255);
 		model.update();
 		paintPlayerShapes();
-		
+
 		switch (model.getViewState()) {
 		case STARTMENU:
 			MenuView.drawMainMenu(this, model);
 			if (model.allPlayersReady()) {
 				if (model.getPlayers().size() == 1) {
 					model.setViewState(ViewState.SINGLEPLAYER);
-					gView = new GamingView(model.getViewState(), this, model);
 				} else if (model.getPlayers().size() == 2) {
 					model.setViewState(ViewState.MULTIPLAYERMENU);
 					model.setVisibilityMultiplayerButtons(true);
@@ -76,16 +74,18 @@ public class MainApplet extends PApplet {
 			break;
 		case SINGLEPLAYER:
 			paintEnemies();
-			gView.drawGame();
+			GamingView.drawGame(model.getViewState(), model, this);
 			break;
 		case MULTIPLAYERMENU:
 			model.setVisibilityMultiplayerButtons(true);
 			MenuView.drawMultiplayerMenu(this, model);
 			break;
 		case COOP:
+			GamingView.drawGame(model.getViewState(), model, this);
 			paintEnemies();
 			break;
 		case PVP:
+			GamingView.drawGame(model.getViewState(), model, this);
 			paintEnemies();
 			break;
 		default:
@@ -98,8 +98,10 @@ public class MainApplet extends PApplet {
 	private void paintEnemies() {
 		for (int i = 0; i < model.getEnemies().size(); i++) {
 			fill(model.getEnemies().get(i).getR(), model.getEnemies().get(i).getG(), model.getEnemies().get(i).getB());
-//			rect(model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY(), model.getEnemies().get(i).getWidth(), model.getEnemies().get(i)
-//					.getHeight());
+			// rect(model.getEnemies().get(i).getX(),
+			// model.getEnemies().get(i).getY(),
+			// model.getEnemies().get(i).getWidth(), model.getEnemies().get(i)
+			// .getHeight());
 			image(model.getEnemies().get(i).getImage(), model.getEnemies().get(i).getX(), model.getEnemies().get(i).getY());
 		}
 	}
@@ -107,7 +109,7 @@ public class MainApplet extends PApplet {
 	private void paintKinectImage() {
 		if (input.isKinect()) {
 			image(input.getDepthImage(), 0, 0);
-			//tint(100);
+			// tint(100);
 		}
 	}
 
@@ -119,7 +121,7 @@ public class MainApplet extends PApplet {
 				loadPixels();
 				for (int i = 0; i < playerPixels.length; i++) {
 					if (playerPixels[i] != 0 && playerPixels[i] == key) {
-						//pixels[i] = color(key * 75 + 25, 100 + 25, 0 + 25);
+						// pixels[i] = color(key * 75 + 25, 100 + 25, 0 + 25);
 						pixels[i] = color;
 					}
 				}
