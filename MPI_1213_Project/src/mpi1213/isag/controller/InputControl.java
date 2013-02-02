@@ -9,6 +9,7 @@ import java.util.List;
 import mpi1213.isag.model.GamingModel;
 import mpi1213.isag.model.Player;
 import mpi1213.isag.model.PushListener;
+import mpi1213.isag.view.ViewState;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -29,6 +30,7 @@ public class InputControl implements MouseMotionListener, MouseListener {
 		if (SimpleOpenNI.deviceCount() < 1) {
 			inputMode = InputMode.MOUSE;
 			model.addPlayer(0);
+		//	model.addPlayer(1);
 			applet.addMouseMotionListener(this);
 			applet.addMouseListener(this);
 		} else {
@@ -49,10 +51,22 @@ public class InputControl implements MouseMotionListener, MouseListener {
 					PVector hand2d = new PVector();
 					context.getJointPositionSkeleton(key, SimpleOpenNI.SKEL_RIGHT_HAND, hand3d);
 					context.convertRealWorldToProjective(hand3d, hand2d);
-					model.getPlayers().get(key).setPosition(hand2d);
+					model.getPlayers().get(key).setTargetPosition(hand2d);
+
+					PVector hip3d = new PVector();
+					PVector hip2d = new PVector();
+					context.getJointPositionSkeleton(key, SimpleOpenNI.SKEL_LEFT_HIP, hip3d);
+					context.convertRealWorldToProjective(hip3d, hip2d);
+					model.getPlayers().get(key).setHipPosition(hip2d);
+
 					if (model.getPlayers().get(key).recognizeGesture(hand3d)) {
 						System.out.println("pushed! " + System.currentTimeMillis());
 						notifyPushListeners(hand2d, model.getPlayers().get(key));
+					}
+					
+					//quick dirty fix for playerButtonLayout
+					if(model.getViewState().equals(ViewState.STARTMENU)){
+						model.updatePlayerButtonLayout();
 					}
 				}
 			}
@@ -68,8 +82,13 @@ public class InputControl implements MouseMotionListener, MouseListener {
 	}
 
 	public void newPlayer(int userId) {
-		context.requestCalibrationSkeleton(userId, true);
-		System.out.println("user: " + userId);
+//		if (model.getViewState().equals(ViewState.STARTMENU)) {
+			context.requestCalibrationSkeleton(userId, true);
+			System.out.println("user: " + userId);
+//		} else {
+//			context.stopTrackingSkeleton(userId);
+//			System.out.println("stop tracking " + userId);
+//		}
 	}
 
 	public void endCalibration(int id, boolean successfull) {
@@ -144,6 +163,6 @@ public class InputControl implements MouseMotionListener, MouseListener {
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		model.getPlayers().get(0).setPosition(new PVector(e.getPoint().x, e.getPoint().y));
+		model.getPlayers().get(0).setTargetPosition(new PVector(e.getPoint().x, e.getPoint().y));
 	}
 }

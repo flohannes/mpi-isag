@@ -87,7 +87,9 @@ public class Button {
 
 	public void setImage(PImage image) {
 		this.image = image;
-		image.resize(width, height);
+		if(image.width != width || image.height != height){
+			image.resize(width, height);
+		}
 	}
 	
 	public boolean isListener(OnClickListener object) {
