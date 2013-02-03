@@ -73,6 +73,7 @@ public class Player implements OnClickListener {
 			reloadMunition();
 		} else if (button instanceof PlayerButton) {
 			isReady = !isReady;
+			((PlayerButton)button).setReady(isReady);
 		}
 	}
 

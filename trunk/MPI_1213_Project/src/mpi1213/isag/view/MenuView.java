@@ -3,6 +3,7 @@ package mpi1213.isag.view;
 import mpi1213.isag.main.MainApplet;
 import mpi1213.isag.model.Button;
 import mpi1213.isag.model.GamingModel;
+import mpi1213.isag.model.PlayerButton;
 import processing.core.PApplet;
 
 public class MenuView {
@@ -12,9 +13,9 @@ public class MenuView {
 		applet.text("Please Shoot into the Target", applet.getWidth() / 2, 100);
 
 		// draw buttons
-		for (Button btn : model.getPlayerButtons()) {
+		for (PlayerButton btn : model.getPlayerButtons()) {
 			if (btn.getImage() != null) {
-				applet.image(btn.getImage(), btn.getPosition().x, btn.getPosition().y);
+				applet.image(btn.getStateImage(), btn.getPosition().x, btn.getPosition().y);
 			} else {
 				applet.rect(btn.getPosition().x, btn.getPosition().y, (float) btn.getWidth(), (float) btn.getHeight());
 			}

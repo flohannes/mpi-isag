@@ -108,29 +108,16 @@ public class GamingView {
 	}
 
 	private static void drawPVP(MainApplet applet, GamingModel model) {
-		// Player 1
-		applet.text("Player 1", 20, 20);
-
-		// Player 2
-		applet.text("Player 2", 550, 20);
-
-		// Bullets P1
-		// Bullets P2
-
-		// Points P1
-		applet.text(model.getPlayers().get(0).getPoints(), 20, 50);
-		// Points P2
-		applet.text(model.getPlayers().get(1).getPoints(), 550, 50);
-
+		drawHUD(applet, model);
+		
 		// Time
-		applet.text("0 : " + model.getGameTime(), applet.getWidth() / 2 - 20, 50);
-		// Trennline
-
-		// Reload P1
-		applet.color(150 * 75 + 25, 100 + 25, 0 + 25);
-		applet.rect(2, 2, 40, 20);
-		// Reload P2
-		applet.color(150 * 75 + 25, 100 + 25, 0 + 25);
-		applet.rect(2, 2, 40, 20);
+		if (model.getGameTime() < 6) {
+			applet.fill(255, 0, 0);
+			applet.text("0 : " + model.getGameTime(), applet.getWidth() / 2, 50);
+		} else {
+			applet.fill(255);
+			applet.text("0 : " + model.getGameTime(), applet.getWidth() / 2, 50);
+		}
+		
 	}
 }
