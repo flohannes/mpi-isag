@@ -34,8 +34,8 @@ public class GamingModel implements PushListener {
 		playerButtons = new HashMap<Integer, PlayerButton>();
 		reloadButtons = new HashMap<Integer, ReloadButton>();
 		multiplayerButtons = new ArrayList<Button>();
-		multiplayerButtons.add(new Button(0, 0, 100, 100, "Co-op", null));
-		multiplayerButtons.add(new Button(0, 0, 100, 100, "PvP", null));
+		multiplayerButtons.add(new Button(0, 0, 150, 100, "Co-op", ImageContainer.coop));
+		multiplayerButtons.add(new Button(0, 0, 150, 100, "PvP", ImageContainer.pvp));
 		this.width = width;
 		this.height = height;
 		updateMultiplayerButtonLayout();
@@ -182,7 +182,7 @@ public class GamingModel implements PushListener {
 		int factor = multiplayerButtons.size() + 1;
 		int counter = 1;
 		for (Button btn : multiplayerButtons) {
-			btn.setPosition(new PVector(counter * (width / factor) - (btn.getWidth() / 2), 2 * height / 3));
+			btn.setPosition(new PVector(counter * (width / factor) - (btn.getWidth() / 2), height / 2));
 			counter++;
 		}
 	}
@@ -227,13 +227,22 @@ public class GamingModel implements PushListener {
 			}
 		}
 		switch (viewState) {
-		case SINGLEPLAYER:
+		case STARTMENU:
+			break;
+		case MULTIPLAYERMENU:
+			break;
+		default:
 			if (!isGameRunning()) {
 				setVisibilityPlayerButtons(true);
 				viewState = ViewState.STARTMENU;
+				// reset playerReady-flag and munition
+				for (Integer key : players.keySet()) {
+					players.get(key).setReady(false);
+					playerButtons.get(key).uncheckButton();
+					players.get(key).reloadMunition();
+					players.get(key).setPoints(0);
+				}
 			}
-			break;
-		default:
 			break;
 		}
 	}
@@ -248,13 +257,6 @@ public class GamingModel implements PushListener {
 	public void startGame() {
 		startTime = System.currentTimeMillis();
 		addInitialEnemies(width, height);
-		// reset playerReady-flag and munition
-		for (Integer key : players.keySet()) {
-			players.get(key).setReady(false);
-			playerButtons.get(key).uncheckButton();
-			players.get(key).reloadMunition();
-			players.get(key).setPoints(0);
-		}
 	}
 
 	/**

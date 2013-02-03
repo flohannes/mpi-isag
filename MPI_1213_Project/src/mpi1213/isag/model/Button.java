@@ -18,7 +18,7 @@ public class Button {
 		this.text = text;
 		this.image = image;
 		if (image != null) {
-			image.resize(width, height);
+			image.resize(width, 0);
 		}
 	}
 
