@@ -38,6 +38,7 @@ public class MainApplet extends PApplet {
 						model.setViewState(ViewState.PVP);
 					}
 					model.setVisibilityMultiplayerButtons(false);
+					model.startGame();
 				}
 			});
 		}
@@ -64,11 +65,11 @@ public class MainApplet extends PApplet {
 			if (model.allPlayersReady()) {
 				if (model.getPlayers().size() == 1) {
 					model.setViewState(ViewState.SINGLEPLAYER);
+					model.startGame();
 				} else if (model.getPlayers().size() == 2) {
 					model.setViewState(ViewState.MULTIPLAYERMENU);
 					model.setVisibilityMultiplayerButtons(true);
 				}
-				model.startGame();
 				model.setVisibilityPlayerButtons(false);
 			}
 			break;
@@ -149,5 +150,9 @@ public class MainApplet extends PApplet {
 
 	public void onEndCalibration(int id, boolean successfull) {
 		input.endCalibration(id, successfull);
+	}
+
+	public boolean sketchFullScreen() {
+		return true;
 	}
 }

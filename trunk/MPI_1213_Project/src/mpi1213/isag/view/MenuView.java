@@ -36,5 +36,9 @@ public class MenuView {
 			applet.textAlign(PApplet.CENTER);
 		}
 	}
+	
+	public static void drawHighScore(MainApplet applet, GamingModel model){
+		
+	}
 
 }

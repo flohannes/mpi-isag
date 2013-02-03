@@ -15,6 +15,8 @@ public class ImageContainer {
 	public static PImage explosion;
 	public static PImage backgroundImage;
 	public static PImage ammoImage;
+	public static PImage coop;
+	public static PImage pvp;
 	
 	public static void initImages(PApplet applet) {
 		backgroundImage = applet.loadImage("Images/sternenhimmel.jpg");
@@ -25,7 +27,8 @@ public class ImageContainer {
 		zielscheibeRot = applet.loadImage("Images/target_red.png");
 		zielscheibeGruen = applet.loadImage("Images/target_green.png");
 		explosion = applet.loadImage("Images/explosion.png");
-		// static alien images
+		coop = applet.loadImage("Images/coop.png");
+		pvp = applet.loadImage("Images/pvp.png");
 		alien1 = applet.loadImage("Images/alien_01.png");
 		alien2 = applet.loadImage("Images/alien_02.png");
 		alien3 = applet.loadImage("Images/alien_03.png");
