@@ -109,9 +109,6 @@ public class GamingModel implements PushListener {
 		for (PlayerButton btn : playerButtons.values()) {
 			if (btn.isListener(player)) {
 				btn.evaluateClick(vector);
-				if (player.isReady()) {
-					btn.checkButton();
-				}
 			}
 		}
 
@@ -235,16 +232,20 @@ public class GamingModel implements PushListener {
 			if (!isGameRunning()) {
 				setVisibilityPlayerButtons(true);
 				viewState = ViewState.STARTMENU;
-				// reset playerReady-flag and munition
-				for (Integer key : players.keySet()) {
-					players.get(key).setReady(false);
-					playerButtons.get(key).uncheckButton();
-					players.get(key).reloadMunition();
-					players.get(key).setPoints(0);
-				}
+				resetPlayers();
 			}
 			break;
 		}
+	}
+
+	private void resetPlayers() {
+		// reset playerReady-flag and munition
+		for (Integer key : players.keySet()) {
+			players.get(key).setReady(false);
+			playerButtons.get(key).setReady(false);
+			players.get(key).reloadMunition();
+			players.get(key).setPoints(0);
+		}		
 	}
 
 	public boolean isGameRunning() {

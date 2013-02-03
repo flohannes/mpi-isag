@@ -19,6 +19,15 @@ public class MainApplet extends PApplet {
 
 	public void setup() {
 		size(windowWidth, windowHeight);
+		
+		//Test
+//		JFrame f = new JFrame();
+//		f.setSize(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+//		f.setExtendedState(Frame.MAXIMIZED_BOTH);
+//		f.setUndecorated(true);
+//		f.add(this);
+//		f.setVisible(true);
+		//
 		fill(255, 0, 0, 128);
 		smooth();
 		noStroke();
@@ -150,9 +159,5 @@ public class MainApplet extends PApplet {
 
 	public void onEndCalibration(int id, boolean successfull) {
 		input.endCalibration(id, successfull);
-	}
-
-	public boolean sketchFullScreen() {
-		return true;
 	}
 }
