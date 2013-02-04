@@ -7,8 +7,13 @@ import mpi1213.isag.model.PlayerButton;
 import processing.core.PApplet;
 
 public class MenuView {
+	
+	private static long clock = 0;
+	private static boolean show = false;
 
 	public static void drawMainMenu(MainApplet applet, GamingModel model) {
+		applet.textSize(12);
+		
 		applet.text("I.S.A.G", applet.getWidth() / 2, 50);
 		applet.text("Please Shoot into the Target", applet.getWidth() / 2, 100);
 
@@ -39,7 +44,28 @@ public class MenuView {
 	}
 	
 	public static void drawHighScore(MainApplet applet, GamingModel model){
-		
+		applet.textAlign(applet.CENTER);
+		applet.textSize(30);
+		applet.text("SCORE", applet.getWidth()/2, applet.getHeight() / 5);
+		applet.textSize(18);
+		int counter = 2;
+		for(Integer key:model.getPlayers().keySet()){
+			applet.text("Player " + key + ":     " + model.getPlayers().get(key).getPoints(), applet.getWidth() / 2, counter * applet.getHeight() / 5);
+			counter++;
+		}
+		if(model.getHighscoreTime() < System.currentTimeMillis()){
+			if(clock == 0){
+				clock = System.currentTimeMillis() + 1000;
+				show = ! show;
+			}
+			if(System.currentTimeMillis() < clock){
+				clock = System.currentTimeMillis() + 1000;
+				show = ! show;
+			}
+			if(show){
+				applet.text("<PUSH> to return to menu", applet.getWidth()/2, 4 * applet.getHeight() / 5);
+			}
+		}
 	}
 
 }
