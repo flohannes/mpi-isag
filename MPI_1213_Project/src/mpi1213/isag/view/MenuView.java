@@ -8,14 +8,12 @@ import processing.core.PApplet;
 
 public class MenuView {
 	
-	private static long clock = 0;
-	private static boolean show = false;
-
 	public static void drawMainMenu(MainApplet applet, GamingModel model) {
-		applet.textSize(12);
+		applet.textSize(18);
 		
 		applet.text("I.S.A.G", applet.getWidth() / 2, 50);
 		applet.text("Please Shoot into the Target", applet.getWidth() / 2, 100);
+		applet.text("<PUSH> your target to start", applet.getWidth()/2, 4 * applet.getHeight() / 5);
 
 		// draw buttons
 		for (PlayerButton btn : model.getPlayerButtons()) {
@@ -44,7 +42,7 @@ public class MenuView {
 	}
 	
 	public static void drawHighScore(MainApplet applet, GamingModel model){
-		applet.textAlign(applet.CENTER);
+		applet.textAlign(PApplet.CENTER);
 		applet.textSize(30);
 		applet.text("SCORE", applet.getWidth()/2, applet.getHeight() / 5);
 		applet.textSize(18);
@@ -54,17 +52,8 @@ public class MenuView {
 			counter++;
 		}
 		if(model.getHighscoreTime() < System.currentTimeMillis()){
-			if(clock == 0){
-				clock = System.currentTimeMillis() + 1000;
-				show = ! show;
-			}
-			if(System.currentTimeMillis() < clock){
-				clock = System.currentTimeMillis() + 1000;
-				show = ! show;
-			}
-			if(show){
-				applet.text("<PUSH> to return to menu", applet.getWidth()/2, 4 * applet.getHeight() / 5);
-			}
+			applet.fill(255,20,20);
+			applet.text("<PUSH> to return to menu", applet.getWidth()/2, 4 * applet.getHeight() / 5);
 		}
 	}
 

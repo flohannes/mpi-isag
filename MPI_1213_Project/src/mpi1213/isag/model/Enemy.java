@@ -86,23 +86,6 @@ public class Enemy {
 		}
 	}
 
-	private void changeDirection() {
-		if(Math.random() < 0.1){
-			deltaX += ((Math.random() > 0.5) ? 1:-1) * Math.random() / 2;
-			deltaY += ((Math.random() > 0.5) ? 1:-1) * Math.random() / 2;
-			
-			deltaX = (deltaX > MAX_DELTA) ? MAX_DELTA : deltaX;
-			deltaX = (deltaX < -MAX_DELTA) ? -MAX_DELTA : deltaX;
-			deltaX = (deltaX < MIN_DELTA && deltaX > 0) ? MIN_DELTA : deltaX;
-			deltaX = (deltaX > -MIN_DELTA && deltaX < 0) ? -MIN_DELTA : deltaX;
-			
-			deltaY = (deltaY > MAX_DELTA) ? MAX_DELTA : deltaY;
-			deltaY = (deltaY < -MAX_DELTA) ? -MAX_DELTA : deltaY;
-			deltaY = (deltaY < MIN_DELTA && deltaY > 0) ? MIN_DELTA : deltaY;
-			deltaY = (deltaY > -MIN_DELTA && deltaY < 0) ? -MIN_DELTA : deltaY;
-		}
-	}
-
 	public boolean isHit(int xPos, int yPos) {
 		return xPos >= this.xPos && xPos <= (this.xPos + width) && yPos >= this.yPos && yPos <= (this.yPos + height);
 	}
