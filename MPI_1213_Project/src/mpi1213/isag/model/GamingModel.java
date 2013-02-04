@@ -7,13 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 import mpi1213.isag.main.ImageContainer;
+import mpi1213.isag.model.bonus.BonusItem;
+import mpi1213.isag.model.bonus.FreezeItem;
 import mpi1213.isag.view.ViewState;
 import processing.core.PImage;
 import processing.core.PVector;
 
 public class GamingModel implements PushListener {
 	private static final int MAX_PLAYERS = 2;
-	private static final long GAME_SESSION_TIME = 5000;// in ms
+	private static final long GAME_SESSION_TIME = 20000;// in ms
 	private static final int INITIAL_ENEMY_COUNT = 6;
 
 	private Map<Integer, Player> players;
@@ -93,9 +95,7 @@ public class GamingModel implements PushListener {
 		int counter = 0;
 		for (int i = 0; i < enemies.size(); i++) {
 			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && player.getMunition() > 0) {
-				removeEnemy(enemies.get(i));
-				// points von player hinzufuegen
-				player.increasePoints(getGamePoints(enemies.get(i).getWidth(), enemies.get(i).getHeight()));
+				removeEnemy(player, enemies.get(i));
 			}
 			counter++;
 		}
@@ -126,6 +126,7 @@ public class GamingModel implements PushListener {
 		for (int i = 0; i < INITIAL_ENEMY_COUNT; i++) {
 			enemies.add(new Enemy(this.width, this.height));
 		}
+		enemies.add(new FreezeItem(width, height));
 	}
 
 	public List<Enemy> getEnemies() {
@@ -204,25 +205,19 @@ public class GamingModel implements PushListener {
 		}
 	}
 
-	private void removeEnemy(Enemy enemy) {
+	private void removeEnemy(Player player, Enemy enemy) {
 		enemy.destroy();
-		try {
-			enemy.setImage((PImage) ImageContainer.explosion.clone());
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+		player.increasePoints(getGamePoints(enemy.getWidth(), enemy.getHeight()));
+		// BonusItem?
+		if (enemy instanceof FreezeItem) {
+			for (int i = 0; i < enemies.size(); i++) {
+				enemies.get(i).freeze(((FreezeItem) enemy).getFreezeTime());
+			}
 		}
 	}
 
 	public void update() {
-		for (int i = 0; i < enemies.size(); i++) {
-			if (enemies.get(i).getState() == EnemyState.TO_BE_REMOVED) {
-				enemies.remove(i);
-				// add enemy
-				enemies.add(new Enemy(this.width, this.height));
-			} else {
-				enemies.get(i).update(this.width, this.height);
-			}
-		}
+
 		switch (viewState) {
 		case STARTMENU:
 			break;
@@ -233,6 +228,17 @@ public class GamingModel implements PushListener {
 				setVisibilityPlayerButtons(true);
 				viewState = ViewState.STARTMENU;
 				resetPlayers();
+			} else {
+				for (int i = 0; i < enemies.size(); i++) {
+					if (enemies.get(i).getState() == EnemyState.TO_BE_REMOVED) {
+						if(!(enemies.get(i) instanceof BonusItem)){
+							enemies.add(new Enemy(this.width, this.height));
+						}
+						enemies.remove(i);						
+					} else {
+						enemies.get(i).update(this.width, this.height);
+					}
+				}
 			}
 			break;
 		}
@@ -245,7 +251,7 @@ public class GamingModel implements PushListener {
 			playerButtons.get(key).setReady(false);
 			players.get(key).reloadMunition();
 			players.get(key).setPoints(0);
-		}		
+		}
 	}
 
 	public boolean isGameRunning() {

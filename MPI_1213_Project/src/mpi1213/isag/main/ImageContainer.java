@@ -17,6 +17,7 @@ public class ImageContainer {
 	public static PImage ammoImage;
 	public static PImage coop;
 	public static PImage pvp;
+	public static PImage freezeItem;
 	
 	public static void initImages(PApplet applet) {
 		backgroundImage = applet.loadImage("Images/sternenhimmel.jpg");
@@ -29,6 +30,7 @@ public class ImageContainer {
 		explosion = applet.loadImage("Images/explosion.png");
 		coop = applet.loadImage("Images/coop.png");
 		pvp = applet.loadImage("Images/pvp.png");
+		freezeItem = applet.loadImage("Images/freeze_item.png");
 		alien1 = applet.loadImage("Images/alien_01.png");
 		alien2 = applet.loadImage("Images/alien_02.png");
 		alien3 = applet.loadImage("Images/alien_03.png");

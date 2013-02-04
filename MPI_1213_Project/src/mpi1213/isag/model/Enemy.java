@@ -1,6 +1,7 @@
 package mpi1213.isag.model;
 
 import mpi1213.isag.main.ImageContainer;
+import mpi1213.isag.model.bonus.FreezeItem;
 import processing.core.PImage;
 
 public class Enemy {
@@ -13,14 +14,14 @@ public class Enemy {
 	public static final int MAX_DELTA = 3;
 	public static final int DESTROY_TIMESPAN = 500;
 
-	private int xPos;
-	private int yPos;
+	public int xPos;
+	public int yPos;
 
-	private int width;
-	private int height;
+	public int width;
+	public int height;
 
-	private double deltaX;
-	private double deltaY;
+	public double deltaX;
+	public double deltaY;
 
 	private PImage image;
 	
@@ -28,11 +29,13 @@ public class Enemy {
 	
 	private EnemyState state = EnemyState.ALIVE;
 
-	// temporary colors
-	private float r = 100;
-	private float g = 100;
-	private float b = 100;
+	private boolean isFrozen = false;
+	private long unfreezeTime = 0;
 
+	public Enemy(){
+		super();
+	}
+	
 	public Enemy(int windowWidth, int windowHeight) {
 		double deltaX, deltaY;
 		deltaX = (Enemy.MIN_DELTA + Math.random() * (Enemy.MAX_DELTA - Enemy.MIN_DELTA + 1)) * getRandomDirection();
@@ -45,7 +48,7 @@ public class Enemy {
 		this.yPos = (int)(Math.random() * (windowHeight - this.height/2));		
 	}
 
-	private double getRandomDirection() {
+	public double getRandomDirection() {
 		if (Math.random() < 0.5) {
 			return -1;
 		} else {
@@ -58,9 +61,6 @@ public class Enemy {
 		this.height = (int) height;
 		this.deltaX = (int) deltaX;
 		this.deltaY = (int) deltaY;
-		this.r = r;
-		this.g = g;
-		this.b = b;
 		try {
 			this.image = (PImage) ImageContainer.getRandomAlienImage().clone();
 			image.resize(this.width, 0);
@@ -69,10 +69,11 @@ public class Enemy {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
-	public void move(int windowWidth, int windowHeight) {
+	private void move(int windowWidth, int windowHeight) {
+		//changeDirection();
+		
 		xPos += deltaX;
 		yPos += deltaY;
 
@@ -83,6 +84,23 @@ public class Enemy {
 		if (yPos < -(height/2) || yPos > (windowHeight - height/2)) {
 			yPos -= deltaY;
 			deltaY = -deltaY;
+		}
+	}
+
+	private void changeDirection() {
+		if(Math.random() < 0.1){
+			deltaX += ((Math.random() > 0.5) ? 1:-1) * Math.random() / 2;
+			deltaY += ((Math.random() > 0.5) ? 1:-1) * Math.random() / 2;
+			
+			deltaX = (deltaX > MAX_DELTA) ? MAX_DELTA : deltaX;
+			deltaX = (deltaX < -MAX_DELTA) ? -MAX_DELTA : deltaX;
+			deltaX = (deltaX < MIN_DELTA && deltaX > 0) ? MIN_DELTA : deltaX;
+			deltaX = (deltaX > -MIN_DELTA && deltaX < 0) ? -MIN_DELTA : deltaX;
+			
+			deltaY = (deltaY > MAX_DELTA) ? MAX_DELTA : deltaY;
+			deltaY = (deltaY < -MAX_DELTA) ? -MAX_DELTA : deltaY;
+			deltaY = (deltaY < MIN_DELTA && deltaY > 0) ? MIN_DELTA : deltaY;
+			deltaY = (deltaY > -MIN_DELTA && deltaY < 0) ? -MIN_DELTA : deltaY;
 		}
 	}
 
@@ -106,18 +124,6 @@ public class Enemy {
 		return height;
 	}
 
-	public float getR() {
-		return r;
-	}
-
-	public float getG() {
-		return g;
-	}
-
-	public float getB() {
-		return b;
-	}
-
 	public PImage getImage() {
 		return this.image;
 	}
@@ -131,8 +137,13 @@ public class Enemy {
 	
 	public void destroy(){
 		state = EnemyState.DESTROYED;
-		deltaX = deltaY = 0;
+		freeze(-1);
 		destroyTime = System.currentTimeMillis();
+		try {
+			this.setImage((PImage) ImageContainer.explosion.clone());
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void markToBeRemoved(){
@@ -144,11 +155,26 @@ public class Enemy {
 	}
 
 	public void update(int width, int height) {
-		move(width, height);
+		if(!isFrozen){
+			move(width, height);
+		} else if (unfreezeTime != -1){
+			if(unfreezeTime < System.currentTimeMillis()){
+				isFrozen = false;
+			}
+		}
 		if(state == EnemyState.DESTROYED){
 			if(System.currentTimeMillis() > (destroyTime + DESTROY_TIMESPAN)){
 				state = EnemyState.TO_BE_REMOVED;
 			}
+		}
+	}
+
+	public void freeze(long freezeTime) {
+		isFrozen  = true;
+		if(freezeTime == -1){
+			unfreezeTime = -1;
+		} else {
+			unfreezeTime = System.currentTimeMillis() + freezeTime;
 		}
 	}
 }
