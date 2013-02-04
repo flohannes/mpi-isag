@@ -9,32 +9,36 @@ public class GestureRecognizer {
 	private static final long Z_TRESHOLD = 70;
 	private static final long XY_THRESHOLD = 50;
 	private static final long TIME_THRESHOLD = 200;
-	private List<PVector> history = new ArrayList<PVector>();
-	private long first, last;
+	private List<PVector> pushHistory = new ArrayList<PVector>();
+	private long pushFirst, pushLast;
+	
+	private List<PVector> jumpHistory = new ArrayList<PVector>();
+	private long jFirst, jLast;
 
 	public GestureRecognizer() {
-		first = last = 0;
+		pushFirst = pushLast = 0;
+		jFirst = jLast = 0;
 	}
 
 	public boolean isPushGesture(PVector vector) {
-		if (history.isEmpty()) {
-			first = last = System.currentTimeMillis();
-			history.add(vector);
+		if (pushHistory.isEmpty()) {
+			pushFirst = pushLast = System.currentTimeMillis();
+			pushHistory.add(vector);
 		} else {
-			if (checkPossiblePush(vector, history.get(history.size() - 1))) {
-				history.add(vector);
+			if (checkPossiblePush(vector, pushHistory.get(pushHistory.size() - 1))) {
+				pushHistory.add(vector);
 			} else {
 				reset();
 			}
-			last = System.currentTimeMillis();
+			pushLast = System.currentTimeMillis();
 			return checkPush();
 		}
 		return false;
 	}
 
 	private boolean checkPush() {
-		if (last - first < TIME_THRESHOLD) {
-			if (Math.abs(history.get(0).z - history.get(history.size() - 1).z) > Z_TRESHOLD) {
+		if (pushLast - pushFirst < TIME_THRESHOLD) {
+			if (Math.abs(pushHistory.get(0).z - pushHistory.get(pushHistory.size() - 1).z) > Z_TRESHOLD) {
 				reset();
 				return true;
 			}
@@ -51,7 +55,11 @@ public class GestureRecognizer {
 	}
 
 	private void reset() {
-		first = last = 0;
-		history = new ArrayList<PVector>();
+		pushFirst = pushLast = 0;
+		pushHistory = new ArrayList<PVector>();
+	}
+	
+	public boolean isUpAndDownGesture(PVector position){
+		return false;
 	}
 }

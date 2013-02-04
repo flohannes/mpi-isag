@@ -107,7 +107,7 @@ public class MainApplet extends PApplet {
 
 	private void paintEnemies() {
 		for (int i = 0; i < model.getEnemies().size(); i++) {
-			fill(model.getEnemies().get(i).getR(), model.getEnemies().get(i).getG(), model.getEnemies().get(i).getB());
+			fill(255,255,255);
 			// rect(model.getEnemies().get(i).getX(),
 			// model.getEnemies().get(i).getY(),
 			// model.getEnemies().get(i).getWidth(), model.getEnemies().get(i)
