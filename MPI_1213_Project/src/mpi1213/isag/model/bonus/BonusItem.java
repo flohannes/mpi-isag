@@ -4,6 +4,8 @@ import mpi1213.isag.model.Enemy;
 import processing.core.PImage;
 
 public class BonusItem extends Enemy{
+	private static final long STANDARD_TIME = 2000;
+	private long time = STANDARD_TIME;
 	
 	public BonusItem(int windowWidth, int windowHeight) {
 		double deltaX, deltaY;
@@ -29,6 +31,27 @@ public class BonusItem extends Enemy{
 	
 		this.xPos = (int)(Math.random() * (windowWidth - this.width/2));
 		this.yPos = (int)(Math.random() * (windowHeight - this.height/2));	
+	}
+	
+	public long getTime() {
+		return time;
+	}
+	
+	public void setTime(long time){
+		this.time = time;
+	}
+
+	public static Enemy getRandomInstance(int windowWidth, int windowHeight) {
+		int random = (int) (1 + Math.random() * (2 - 1 + 1));
+
+		switch (random) {
+		case 1:
+			return new FreezeItem(windowWidth, windowHeight);
+		case 2:
+			return new UnlimitedAmmoItem(windowWidth, windowHeight);
+		default:
+			return null;
+		}
 	}
 
 }

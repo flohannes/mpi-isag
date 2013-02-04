@@ -1,7 +1,6 @@
 package mpi1213.isag.model;
 
 import mpi1213.isag.main.ImageContainer;
-import mpi1213.isag.model.bonus.FreezeItem;
 import processing.core.PImage;
 
 public class Enemy {

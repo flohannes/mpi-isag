@@ -15,6 +15,10 @@ public class Player implements OnClickListener {
 	private int munition;
 	private boolean isReady = false;
 	private int shapeColor = 1;
+	
+	private boolean isUnlimited = false;
+
+	private long unlimitedAmmoTime;
 
 	public Player() {
 		munition = 10;
@@ -42,10 +46,6 @@ public class Player implements OnClickListener {
 
 	public int getMunition() {
 		return munition;
-	}
-
-	public void setMunition(int munition) {
-		this.munition = munition;
 	}
 
 	public void reloadMunition() {
@@ -108,5 +108,24 @@ public class Player implements OnClickListener {
 
 	public void setHipPosition(PVector hipPosition) {
 		this.hipPosition = hipPosition;
+	}
+
+	public void unlimitedAmmo(long time) {
+		isUnlimited = true;
+		unlimitedAmmoTime = System.currentTimeMillis() + time;
+	}
+
+	public void decreaseMunition() {
+		if(!isUnlimited){
+			munition--;
+		} else {
+			if(System.currentTimeMillis() > unlimitedAmmoTime){
+				isUnlimited = false;
+			}
+		}
+	}
+	
+	public boolean isUnlimited(){
+		return isUnlimited;
 	}
 }

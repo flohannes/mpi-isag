@@ -9,6 +9,7 @@ import java.util.Map;
 import mpi1213.isag.main.ImageContainer;
 import mpi1213.isag.model.bonus.BonusItem;
 import mpi1213.isag.model.bonus.FreezeItem;
+import mpi1213.isag.model.bonus.UnlimitedAmmoItem;
 import mpi1213.isag.view.ViewState;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -17,6 +18,7 @@ public class GamingModel implements PushListener {
 	private static final int MAX_PLAYERS = 2;
 	private static final long GAME_SESSION_TIME = 20000;// in ms
 	private static final int INITIAL_ENEMY_COUNT = 6;
+	private static final int BONUS_ITEM_POINT_STEP = 400;
 
 	private Map<Integer, Player> players;
 	private List<Enemy> enemies;
@@ -27,6 +29,7 @@ public class GamingModel implements PushListener {
 	private long startTime = 0;
 	private float gamePointSlope;
 	private float gamePointAbs = 100f;
+	private int bonusItemPointLimit = BONUS_ITEM_POINT_STEP;
 
 	private ViewState viewState = ViewState.STARTMENU;
 
@@ -94,7 +97,7 @@ public class GamingModel implements PushListener {
 	public void pushed(PVector vector, Player player) {
 		int counter = 0;
 		for (int i = 0; i < enemies.size(); i++) {
-			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && player.getMunition() > 0) {
+			if (enemies.get(i).isHit((int) vector.x, (int) vector.y) && player.getMunition() > 0 && enemies.get(i).getState() == EnemyState.ALIVE) {
 				removeEnemy(player, enemies.get(i));
 			}
 			counter++;
@@ -104,7 +107,7 @@ public class GamingModel implements PushListener {
 			player.setShoot(vector);
 		}
 
-		player.setMunition(player.getMunition() - 1);
+		player.decreaseMunition();
 
 		for (PlayerButton btn : playerButtons.values()) {
 			if (btn.isListener(player)) {
@@ -126,7 +129,6 @@ public class GamingModel implements PushListener {
 		for (int i = 0; i < INITIAL_ENEMY_COUNT; i++) {
 			enemies.add(new Enemy(this.width, this.height));
 		}
-		enemies.add(new FreezeItem(width, height));
 	}
 
 	public List<Enemy> getEnemies() {
@@ -208,11 +210,17 @@ public class GamingModel implements PushListener {
 	private void removeEnemy(Player player, Enemy enemy) {
 		enemy.destroy();
 		player.increasePoints(getGamePoints(enemy.getWidth(), enemy.getHeight()));
+		if(player.getPoints() > bonusItemPointLimit){
+			enemies.add(BonusItem.getRandomInstance(width, height));
+			bonusItemPointLimit += BONUS_ITEM_POINT_STEP;
+		}
 		// BonusItem?
 		if (enemy instanceof FreezeItem) {
 			for (int i = 0; i < enemies.size(); i++) {
-				enemies.get(i).freeze(((FreezeItem) enemy).getFreezeTime());
+				enemies.get(i).freeze(((BonusItem) enemy).getTime());
 			}
+		} else if(enemy instanceof UnlimitedAmmoItem){
+			player.unlimitedAmmo(((BonusItem)enemy).getTime());
 		}
 	}
 

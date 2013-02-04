@@ -91,12 +91,12 @@ public class MainApplet extends PApplet {
 			MenuView.drawMultiplayerMenu(this, model);
 			break;
 		case COOP:
-			GamingView.drawGame(model.getViewState(), model, this);
 			paintEnemies();
+			GamingView.drawGame(model.getViewState(), model, this);
 			break;
 		case PVP:
-			GamingView.drawGame(model.getViewState(), model, this);
 			paintEnemies();
+			GamingView.drawGame(model.getViewState(), model, this);
 			break;
 		default:
 			break;
