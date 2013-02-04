@@ -113,8 +113,11 @@ public class MainApplet extends PApplet {
 			paintEnemies();
 			GamingView.drawGame(model.getViewState(), model, this);
 			break;
-		case HIGHSCORE:
+		case HIGHSCORE_SINGLE:
 			MenuView.drawHighScore(this, model);
+			break;
+		case HIGHSCORE_COOP:
+			MenuView.drawHighScoreCoop(this, model);
 			break;
 		default:
 			break;

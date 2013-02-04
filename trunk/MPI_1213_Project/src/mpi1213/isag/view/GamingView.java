@@ -59,7 +59,7 @@ public class GamingView {
 					applet.textSize(30);
 					applet.fill(255, 0, 0);
 					applet.text("R E L O A D", 100, 55);
-					applet.textSize(12);
+					applet.textSize(18);
 				}
 				// Reload
 				if (model.getPlayers().size() == 1) {

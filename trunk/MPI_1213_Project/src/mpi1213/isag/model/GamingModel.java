@@ -2,6 +2,7 @@ package mpi1213.isag.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,9 @@ public class GamingModel implements PushListener {
 	private float gamePointAbs = 100f;
 	private int bonusItemPointLimit = BONUS_ITEM_POINT_STEP;
 	private long highscoreTime = 0;
+	
+	private List<HighscoreItem> singleHighcores = new ArrayList<HighscoreItem>();
+	private List<HighscoreItem> coopHighcores = new ArrayList<HighscoreItem>();
 
 	private ViewState viewState = ViewState.STARTMENU;
 
@@ -123,7 +127,7 @@ public class GamingModel implements PushListener {
 		}
 		
 		//highscore 
-		if(viewState == ViewState.HIGHSCORE){
+		if(viewState == ViewState.HIGHSCORE_COOP || viewState == ViewState.HIGHSCORE_SINGLE){
 			if(highscoreTime < System.currentTimeMillis()){
 				viewState = ViewState.STARTMENU;
 				resetPlayers();
@@ -238,12 +242,26 @@ public class GamingModel implements PushListener {
 			break;
 		case MULTIPLAYERMENU:
 			break;
-		case HIGHSCORE:
+		case HIGHSCORE_SINGLE:
+			break;
+		case HIGHSCORE_COOP:
 			break;
 		default:
 			if (!isGameRunning()) {
 				setVisibilityPlayerButtons(true);
-				viewState = ViewState.HIGHSCORE;
+				if(viewState == ViewState.COOP){
+					int result = 0;
+					for(Integer key:players.keySet()){
+						result += players.get(key).getPoints();
+					}
+					coopHighcores.add(new HighscoreItem("", result));
+					viewState = ViewState.HIGHSCORE_COOP;
+				} else {
+					for(Integer key:players.keySet()){					
+						singleHighcores.add(new HighscoreItem("Player "+key, players.get(key).getPoints()));
+					}
+					viewState = ViewState.HIGHSCORE_SINGLE;
+				}
 				highscoreTime = System.currentTimeMillis() + 3000;
 			} else {
 				for (int i = 0; i < enemies.size(); i++) {
@@ -313,5 +331,10 @@ public class GamingModel implements PushListener {
 	
 	public long getHighscoreTime(){
 		return highscoreTime;
+	}
+	
+	public List<HighscoreItem> getSingleHighscoreList(){
+		Collections.sort(singleHighcores);
+		return singleHighcores;
 	}
 }
