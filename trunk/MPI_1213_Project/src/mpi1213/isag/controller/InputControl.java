@@ -44,15 +44,70 @@ public class InputControl implements MouseMotionListener, MouseListener {
 	public void update() {
 		if (inputMode == InputMode.KINECT) {
 			context.update();
+			
+			boolean firstPlayer = true;
+			int keyTemp = 0;
+			PVector hand2dTemp = null;
+			PVector head2dTemp = null;
 
 			for (Integer key : model.getPlayers().keySet()) {
 				if (context.isTrackingSkeleton(key)) {
 					PVector hand3d = new PVector();
 					PVector hand2d = new PVector();
+					PVector head3d = new PVector();
+					PVector head2d = new PVector();
+					
 					context.getJointPositionSkeleton(key, SimpleOpenNI.SKEL_RIGHT_HAND, hand3d);
 					context.convertRealWorldToProjective(hand3d, hand2d);
-					model.getPlayers().get(key).setTargetPosition(hand2d);
-
+					
+					context.getJointPositionSkeleton(key, SimpleOpenNI.SKEL_HEAD, head3d);
+					context.convertRealWorldToProjective(head3d, head2d);
+					
+					float new_x;
+					float new_y;
+					
+					if (firstPlayer) {
+						firstPlayer = false;
+						keyTemp = key;
+						hand2dTemp = hand2d;
+						head2dTemp = head2d;
+						if (model.getPlayers().keySet().size() > 1) {
+							if (head2d.x < context.depthWidth()/2) {
+								new_x = (hand2d.x - context.depthWidth()/4)*2 + context.depthWidth()/4;
+								new_y = (hand2d.y - context.depthHeight()/2)*2 + context.depthHeight()/2;
+								
+								hand2d.set(new_x, new_y, hand2d.z);
+								model.getPlayers().get(key).setTargetPosition(hand2d);
+							} else {
+								new_x = (hand2d.x - context.depthWidth()*3/4)*2 + context.depthWidth()*3/4;
+								new_y = (hand2d.y - context.depthHeight()/2)*2 + context.depthHeight()/2;
+								
+								hand2d.set(new_x, new_y, hand2d.z);
+								model.getPlayers().get(key).setTargetPosition(hand2d);
+							}
+						} else {
+							new_x = (hand2d.x - context.depthWidth()/2)*2 + context.depthWidth()/2;
+							new_y = (hand2d.y - context.depthHeight()/2)*2 + context.depthHeight()/2;
+						
+							hand2d.set(new_x, new_y, hand2d.z);
+							model.getPlayers().get(key).setTargetPosition(hand2d);
+						}
+					} else {
+						if (head2d.x > head2dTemp.x) {
+							new_x = (hand2d.x - context.depthWidth()*3/4)*2 + context.depthWidth()*3/4;
+							new_y = (hand2d.y - context.depthHeight()/2)*2 + context.depthHeight()/2;
+							
+							hand2d.set(new_x, new_y, hand2d.z);
+							model.getPlayers().get(key).setTargetPosition(hand2d);
+						} else {
+							new_x = (hand2d.x - context.depthWidth()/4)*2 + context.depthWidth()/4;
+							new_y = (hand2d.y - context.depthHeight()/2)*2 + context.depthHeight()/2;
+							
+							hand2d.set(new_x, new_y, hand2d.z);
+							model.getPlayers().get(key).setTargetPosition(hand2d);
+						}
+					}
+					
 					PVector hip3d = new PVector();
 					PVector hip2d = new PVector();
 					context.getJointPositionSkeleton(key, SimpleOpenNI.SKEL_LEFT_HIP, hip3d);
