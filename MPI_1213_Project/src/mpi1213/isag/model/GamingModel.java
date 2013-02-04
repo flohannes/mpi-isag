@@ -76,9 +76,9 @@ public class GamingModel implements PushListener {
 			ReloadButton rButton;
 			String text = "Reload (P" + players.size() + ")";
 			if (players.get(id).getTargetPosition().x < width / 2) {
-				rButton = new ReloadButton(10, height - 50, 40, 40, text, null);
+				rButton = new ReloadButton(10, height - 50, 40, 40, text, ImageContainer.reload);
 			} else {
-				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text, null);
+				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text, ImageContainer.reload);
 			}
 			rButton.setOnClickListener(players.get(id));
 			reloadButtons.put(id, rButton);
@@ -107,7 +107,9 @@ public class GamingModel implements PushListener {
 			player.setShoot(vector);
 		}
 
-		player.decreaseMunition();
+		if(isGameRunning()){
+			player.decreaseMunition();
+		}
 
 		for (PlayerButton btn : playerButtons.values()) {
 			if (btn.isListener(player)) {
@@ -160,7 +162,7 @@ public class GamingModel implements PushListener {
 					tempPlayer = players.get(key);
 					leftButton = playerButtons.get(key);
 				} else {
-					if (players.get(key).getTargetPosition().x <= tempPlayer.getTargetPosition().x) {
+					if (players.get(key).getPositionForSideDecision().x <= tempPlayer.getPositionForSideDecision().x) {
 						rightButton = leftButton;
 						leftButton = playerButtons.get(key);
 					} else {

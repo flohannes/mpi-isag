@@ -37,7 +37,7 @@ public class GamingView {
 			if (leftPlayer == null) {
 				leftPlayer = player;
 			} else {
-				if (player.getTargetPosition().x <= leftPlayer.getTargetPosition().x) {
+				if (player.getPositionForSideDecision().x <= leftPlayer.getPositionForSideDecision().x) {
 					leftPlayer = player;
 				}
 			}
@@ -62,13 +62,21 @@ public class GamingView {
 					applet.textSize(12);
 				}
 				// Reload
-				model.getReloadButtons()
-						.get(key)
-						.setPosition(
-								new PVector(applet.getWidth() / 2 - model.getReloadButtons().get(key).getWidth(), applet.getHeight()
-										- model.getReloadButtons().get(key).getHeight()));
-				applet.rect(model.getReloadButtons().get(key).getPosition().x, model.getReloadButtons().get(key).getPosition().y, model
-						.getReloadButtons().get(key).getWidth(), model.getReloadButtons().get(key).getHeight());
+				if (model.getPlayers().size() == 1) {
+					model.getReloadButtons()
+							.get(key)
+							.setPosition(
+									new PVector(applet.getWidth() - model.getReloadButtons().get(key).getWidth(), applet.getHeight()
+											- model.getReloadButtons().get(key).getHeight()));
+				} else {
+					model.getReloadButtons()
+							.get(key)
+							.setPosition(
+									new PVector(applet.getWidth() / 2 - model.getReloadButtons().get(key).getWidth(), applet.getHeight()
+											- model.getReloadButtons().get(key).getHeight()));
+				}
+
+				applet.image(model.getReloadButtons().get(key).getImage(),model.getReloadButtons().get(key).getPosition().x, model.getReloadButtons().get(key).getPosition().y);
 
 			} else {
 				applet.fill(model.getPlayers().get(key).getShapeColor());
@@ -92,8 +100,8 @@ public class GamingView {
 						.setPosition(
 								new PVector(applet.getWidth() - model.getReloadButtons().get(key).getWidth(), applet.getHeight()
 										- model.getReloadButtons().get(key).getHeight()));
-				applet.rect(model.getReloadButtons().get(key).getPosition().x, model.getReloadButtons().get(key).getPosition().y, model
-						.getReloadButtons().get(key).getWidth(), model.getReloadButtons().get(key).getHeight());
+				applet.image(model.getReloadButtons().get(key).getImage(),model.getReloadButtons().get(key).getPosition().x, model.getReloadButtons().get(key).getPosition().y);
+
 			}
 			// Missed shoots
 			if (model.getPlayers().get(key).getShoot() != null) {
@@ -109,7 +117,7 @@ public class GamingView {
 
 	private static void drawPVP(MainApplet applet, GamingModel model) {
 		drawHUD(applet, model);
-		
+
 		// Time
 		if (model.getGameTime() < 6) {
 			applet.fill(255, 0, 0);
@@ -118,6 +126,6 @@ public class GamingView {
 			applet.fill(255);
 			applet.text("0 : " + model.getGameTime(), applet.getWidth() / 2, 50);
 		}
-		
+
 	}
 }

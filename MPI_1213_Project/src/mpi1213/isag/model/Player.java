@@ -8,7 +8,7 @@ public class Player implements OnClickListener {
 	private static int MAX_MUNITION = 10;
 
 	private PVector targetPosition = new PVector();
-	private PVector hipPosition;
+	private PVector hipPosition = null;
 	private GestureRecognizer gestureRecognizer = new GestureRecognizer();
 	private PVector shoot;
 	private int points;
@@ -127,5 +127,13 @@ public class Player implements OnClickListener {
 	
 	public boolean isUnlimited(){
 		return isUnlimited;
+	}
+	
+	public PVector getPositionForSideDecision(){
+		if (hipPosition == null){
+			return targetPosition;
+		} else {
+			return hipPosition;
+		}
 	}
 }
