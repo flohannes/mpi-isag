@@ -20,10 +20,11 @@ public class ImageContainer {
 	public static PImage freezeItem;
 	public static PImage unlimitedAmmo;
 	public static PImage reload;
-	
+
 	public static void initImages(PApplet applet) {
 		backgroundImage = applet.loadImage("Images/sternenhimmel.jpg");
-		backgroundImage.resize(applet.getWidth(), applet.getHeight());
+		// backgroundImage.resize(applet.getWidth(), applet.getHeight());
+		backgroundImage.resize(640, 480);
 		ammoImage = applet.loadImage("Images/ammo.png");
 		ammoImage.resize(applet.getWidth() / 45, 0);
 		zielscheibeBlau = applet.loadImage("Images/target_blue.png");
@@ -56,5 +57,18 @@ public class ImageContainer {
 		default:
 			return null;
 		}
+	}
+
+	public static PImage getBackgroundInstance() {
+		PImage newImage;
+
+		try {
+			newImage = (PImage) backgroundImage.clone();
+			return newImage;
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

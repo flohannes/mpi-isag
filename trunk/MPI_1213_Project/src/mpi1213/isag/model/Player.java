@@ -15,6 +15,7 @@ public class Player implements OnClickListener {
 	private int munition;
 	private boolean isReady = false;
 	private int shapeColor = 1;
+	private int crossColor = 1;
 	
 	private boolean isUnlimited = false;
 
@@ -94,8 +95,13 @@ public class Player implements OnClickListener {
 		isReady = b;
 	}
 	
-	public void setShapeColor(int color){
-		shapeColor = color;
+//	public void setShapeColor(int color){
+//		shapeColor = color;
+//	}
+	
+	public void setColors(int shape, int cross){
+		shapeColor = shape;
+		crossColor = cross;
 	}
 
 	public int getShapeColor() {
@@ -135,5 +141,9 @@ public class Player implements OnClickListener {
 		} else {
 			return hipPosition;
 		}
+	}
+	
+	public int getCrossColor(){
+		return crossColor;
 	}
 }

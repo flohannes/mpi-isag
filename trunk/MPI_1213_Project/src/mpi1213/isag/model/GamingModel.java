@@ -30,6 +30,7 @@ public class GamingModel implements PushListener {
 	private float gamePointSlope;
 	private float gamePointAbs = 100f;
 	private int bonusItemPointLimit = BONUS_ITEM_POINT_STEP;
+	private long highscoreTime = 0;
 
 	private ViewState viewState = ViewState.STARTMENU;
 
@@ -63,26 +64,22 @@ public class GamingModel implements PushListener {
 			PImage buttonImage;
 			if (players.size() == 1) {
 				buttonImage = ImageContainer.zielscheibeRot;
-				players.get(id).setShapeColor(-65536);
+//				players.get(id).setShapeColor(-65536);
+				players.get(id).setColors(-6225890, -65536);
 			} else {
 				buttonImage = ImageContainer.zielscheibeBlau;
-				players.get(id).setShapeColor(-16776961);
+//				players.get(id).setShapeColor(-16776961);
+				players.get(id).setColors(-16759897, -16776961);
 			}
 			PlayerButton pButton = new PlayerButton(0, 0, 100, 100, "Player " + players.size(), buttonImage);
 			pButton.setOnClickListener(players.get(id));
 			playerButtons.put(id, pButton);
 
 			// reload button
-			ReloadButton rButton;
 			String text = "Reload (P" + players.size() + ")";
-			if (players.get(id).getTargetPosition().x < width / 2) {
-				rButton = new ReloadButton(10, height - 50, 40, 40, text, ImageContainer.reload);
-			} else {
-				rButton = new ReloadButton(width - 50, height - 50, 40, 40, text, ImageContainer.reload);
-			}
+			ReloadButton rButton = new ReloadButton(0, 0, width / 8, width / 8, text, ImageContainer.reload);
 			rButton.setOnClickListener(players.get(id));
 			reloadButtons.put(id, rButton);
-			updatePlayerButtonLayout();
 
 			return true;
 		}
@@ -107,7 +104,7 @@ public class GamingModel implements PushListener {
 			player.setShoot(vector);
 		}
 
-		if(isGameRunning()){
+		if (isGameRunning()) {
 			player.decreaseMunition();
 		}
 
@@ -123,6 +120,14 @@ public class GamingModel implements PushListener {
 
 		for (Button btn : multiplayerButtons) {
 			btn.evaluateClick(vector);
+		}
+		
+		//highscore 
+		if(viewState == ViewState.HIGHSCORE){
+			if(highscoreTime < System.currentTimeMillis()){
+				viewState = ViewState.STARTMENU;
+				resetPlayers();
+			}
 		}
 	}
 
@@ -212,7 +217,7 @@ public class GamingModel implements PushListener {
 	private void removeEnemy(Player player, Enemy enemy) {
 		enemy.destroy();
 		player.increasePoints(getGamePoints(enemy.getWidth(), enemy.getHeight()));
-		if(player.getPoints() > bonusItemPointLimit){
+		if (player.getPoints() > bonusItemPointLimit) {
 			enemies.add(BonusItem.getRandomInstance(width, height));
 			bonusItemPointLimit += BONUS_ITEM_POINT_STEP;
 		}
@@ -221,36 +226,45 @@ public class GamingModel implements PushListener {
 			for (int i = 0; i < enemies.size(); i++) {
 				enemies.get(i).freeze(((BonusItem) enemy).getTime());
 			}
-		} else if(enemy instanceof UnlimitedAmmoItem){
-			player.unlimitedAmmo(((BonusItem)enemy).getTime());
+		} else if (enemy instanceof UnlimitedAmmoItem) {
+			player.unlimitedAmmo(((BonusItem) enemy).getTime());
 		}
 	}
 
 	public void update() {
-
 		switch (viewState) {
 		case STARTMENU:
+			updatePlayerButtonLayout();
 			break;
 		case MULTIPLAYERMENU:
+			break;
+		case HIGHSCORE:
 			break;
 		default:
 			if (!isGameRunning()) {
 				setVisibilityPlayerButtons(true);
-				viewState = ViewState.STARTMENU;
-				resetPlayers();
+				viewState = ViewState.HIGHSCORE;
+				highscoreTime = System.currentTimeMillis() + 3000;
 			} else {
 				for (int i = 0; i < enemies.size(); i++) {
 					if (enemies.get(i).getState() == EnemyState.TO_BE_REMOVED) {
-						if(!(enemies.get(i) instanceof BonusItem)){
+						if (!(enemies.get(i) instanceof BonusItem)) {
 							enemies.add(new Enemy(this.width, this.height));
 						}
-						enemies.remove(i);						
+						enemies.remove(i);
 					} else {
 						enemies.get(i).update(this.width, this.height);
 					}
 				}
+				checkReload();
 			}
 			break;
+		}
+	}
+
+	private void checkReload() {
+		for (Integer key : players.keySet()) {
+			reloadButtons.get(key).evaluateClick(players.get(key).getTargetPosition());
 		}
 	}
 
@@ -262,6 +276,7 @@ public class GamingModel implements PushListener {
 			players.get(key).reloadMunition();
 			players.get(key).setPoints(0);
 		}
+		enemies = new ArrayList<Enemy>();
 	}
 
 	public boolean isGameRunning() {
@@ -294,5 +309,9 @@ public class GamingModel implements PushListener {
 
 	public void setViewState(ViewState viewState) {
 		this.viewState = viewState;
+	}
+	
+	public long getHighscoreTime(){
+		return highscoreTime;
 	}
 }

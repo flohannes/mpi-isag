@@ -118,11 +118,6 @@ public class InputControl implements MouseMotionListener, MouseListener {
 						System.out.println("pushed! " + System.currentTimeMillis());
 						notifyPushListeners(hand2d, model.getPlayers().get(key));
 					}
-					
-					//quick dirty fix for playerButtonLayout
-					if(model.getViewState().equals(ViewState.STARTMENU)){
-						model.updatePlayerButtonLayout();
-					}
 				}
 			}
 		}
