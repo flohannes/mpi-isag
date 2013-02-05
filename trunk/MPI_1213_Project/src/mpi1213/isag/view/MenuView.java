@@ -3,7 +3,6 @@ package mpi1213.isag.view;
 import mpi1213.isag.main.MainApplet;
 import mpi1213.isag.model.Button;
 import mpi1213.isag.model.GamingModel;
-import mpi1213.isag.model.HighscoreItem;
 import mpi1213.isag.model.PlayerButton;
 import processing.core.PApplet;
 
