@@ -47,8 +47,8 @@ public class GamingView {
 		for (Integer key : model.getPlayers().keySet()) {
 			if (model.getPlayers().get(key) == leftPlayer) {
 				applet.fill(leftPlayer.getShapeColor());
-				applet.text("Player" + key, 20, 20);
-				applet.text("Points: " + model.getPlayers().get(key).getPoints(), 100, 20);
+				applet.text("Player" + key, 30, 20);
+				applet.text("Points: " + model.getPlayers().get(key).getPoints(), 120, 20);
 				// Bullets
 				for (int j = 0; j < model.getPlayers().get(key).getMunition(); j++) {
 					int x1 = j * (ImageContainer.ammoImage.width + 1);
