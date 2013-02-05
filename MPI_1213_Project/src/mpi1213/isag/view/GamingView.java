@@ -81,7 +81,7 @@ public class GamingView {
 			} else {
 				applet.fill(model.getPlayers().get(key).getShapeColor());
 				applet.text("Player" + key, applet.getWidth() - 20, 20);
-				applet.text("Points: " + model.getPlayers().get(key).getPoints(), applet.getWidth() - 100, 20);
+				applet.text("Points: " + model.getPlayers().get(key).getPoints(), applet.getWidth() - 120, 20);
 				// Bullets
 				for (int j = model.getPlayers().get(key).getMunition(); j > 0; j--) {
 					int x1 = applet.getWidth() - j * (ImageContainer.ammoImage.width + 1);
@@ -92,7 +92,7 @@ public class GamingView {
 					applet.textSize(30);
 					applet.fill(255, 0, 0);
 					applet.text("R E L O A D", applet.getWidth() - 100, 55);
-					applet.textSize(12);
+					applet.textSize(18);
 				}
 				// Reload
 				model.getReloadButtons()

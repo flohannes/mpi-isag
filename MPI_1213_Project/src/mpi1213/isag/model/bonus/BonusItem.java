@@ -4,7 +4,7 @@ import mpi1213.isag.model.Enemy;
 import processing.core.PImage;
 
 public class BonusItem extends Enemy{
-	private static final long STANDARD_TIME = 2000;
+	private static final long STANDARD_TIME = 3000;
 	private long time = STANDARD_TIME;
 	
 	public BonusItem(int windowWidth, int windowHeight) {

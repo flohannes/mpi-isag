@@ -32,6 +32,7 @@ public class GamingModel implements PushListener {
 	private float gamePointAbs = 100f;
 	private int bonusItemPointLimit = BONUS_ITEM_POINT_STEP;
 	private long highscoreTime = 0;
+	private long delayTime = 0;
 	
 	private List<HighscoreItem> singleHighcores = new ArrayList<HighscoreItem>();
 	private List<HighscoreItem> coopHighcores = new ArrayList<HighscoreItem>();
@@ -113,9 +114,9 @@ public class GamingModel implements PushListener {
 		}
 
 		for (PlayerButton btn : playerButtons.values()) {
-			if (btn.isListener(player)) {
+//			if (btn.isListener(player)) {
 				btn.evaluateClick(vector);
-			}
+//			}
 		}
 
 		for (Button btn : reloadButtons.values()) {
@@ -123,7 +124,9 @@ public class GamingModel implements PushListener {
 		}
 
 		for (Button btn : multiplayerButtons) {
-			btn.evaluateClick(vector);
+			if(delayTime != 0 && delayTime < System.currentTimeMillis()){
+				btn.evaluateClick(vector);
+			}
 		}
 		
 		//highscore 
@@ -252,12 +255,14 @@ public class GamingModel implements PushListener {
 				if(viewState == ViewState.COOP){
 					int result = 0;
 					for(Integer key:players.keySet()){
+						players.get(key).setNoMorePoints(true);
 						result += players.get(key).getPoints();
 					}
 					coopHighcores.add(new HighscoreItem("", result));
 					viewState = ViewState.HIGHSCORE_COOP;
 				} else {
-					for(Integer key:players.keySet()){					
+					for(Integer key:players.keySet()){	
+						players.get(key).setNoMorePoints(true);
 						singleHighcores.add(new HighscoreItem("Player "+key, players.get(key).getPoints()));
 					}
 					viewState = ViewState.HIGHSCORE_SINGLE;
@@ -293,6 +298,7 @@ public class GamingModel implements PushListener {
 			playerButtons.get(key).setReady(false);
 			players.get(key).reloadMunition();
 			players.get(key).setPoints(0);
+			players.get(key).setNoMorePoints(false);
 		}
 		enemies = new ArrayList<Enemy>();
 	}
@@ -336,5 +342,14 @@ public class GamingModel implements PushListener {
 	public List<HighscoreItem> getSingleHighscoreList(){
 		Collections.sort(singleHighcores);
 		return singleHighcores;
+	}
+	
+	public void refreshDelay(){
+		delayTime = System.currentTimeMillis() + 1000;
+	}
+
+	public List<HighscoreItem> getCoopHighscoreList(){
+		Collections.sort(coopHighcores);
+		return coopHighcores;
 	}
 }

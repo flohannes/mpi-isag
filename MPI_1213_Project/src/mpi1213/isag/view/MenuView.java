@@ -81,8 +81,8 @@ public class MenuView {
 		
 		applet.textSize(10);
 		String result = "";
-		for (int i = 0; i < ((model.getSingleHighscoreList().size() < 6) ? model.getSingleHighscoreList().size() : 5); i++) {
-			result += (i + 1) + ". " + model.getSingleHighscoreList().get(i).text + "  -  " + model.getSingleHighscoreList().get(i).score + "\n";
+		for (int i = 0; i < ((model.getCoopHighscoreList().size() < 6) ? model.getCoopHighscoreList().size() : 5); i++) {
+			result += (i + 1) + ". " + model.getCoopHighscoreList().get(i).text + "  -  " + model.getCoopHighscoreList().get(i).score + "\n";
 		}
 		applet.text(result, applet.getWidth() / 2, 3 * applet.getHeight() / 5);
 		
