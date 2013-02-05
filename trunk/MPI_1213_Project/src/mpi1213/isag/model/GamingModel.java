@@ -114,9 +114,9 @@ public class GamingModel implements PushListener {
 		}
 
 		for (PlayerButton btn : playerButtons.values()) {
-//			if (btn.isListener(player)) {
+			if (btn.isListener(player)) {
 				btn.evaluateClick(vector);
-//			}
+			}
 		}
 
 		for (Button btn : reloadButtons.values()) {
