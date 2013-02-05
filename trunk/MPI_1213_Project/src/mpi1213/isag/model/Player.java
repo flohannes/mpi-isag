@@ -14,6 +14,7 @@ public class Player implements OnClickListener {
 	private int points;
 	private int munition;
 	private boolean isReady = false;
+	private boolean noMorePoints = false;
 	private int shapeColor = 1;
 	private int crossColor = 1;
 	
@@ -54,7 +55,9 @@ public class Player implements OnClickListener {
 	}
 
 	public void increasePoints(int pointsToAdd) {
-		points += pointsToAdd;
+		if(!noMorePoints){
+			points += pointsToAdd;
+		}
 	}
 
 	public boolean isMunitionEmpty() {
@@ -145,5 +148,9 @@ public class Player implements OnClickListener {
 	
 	public int getCrossColor(){
 		return crossColor;
+	}
+	
+	public void setNoMorePoints(boolean value){
+		noMorePoints = value;
 	}
 }

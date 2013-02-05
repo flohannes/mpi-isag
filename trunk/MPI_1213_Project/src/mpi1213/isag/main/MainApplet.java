@@ -92,6 +92,7 @@ public class MainApplet extends PApplet {
 					model.startGame();
 				} else if (model.getPlayers().size() == 2) {
 					model.setViewState(ViewState.MULTIPLAYERMENU);
+					model.refreshDelay();
 					model.setVisibilityMultiplayerButtons(true);
 				}
 				model.setVisibilityPlayerButtons(false);

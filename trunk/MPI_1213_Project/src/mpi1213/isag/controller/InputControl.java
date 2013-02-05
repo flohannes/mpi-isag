@@ -30,7 +30,7 @@ public class InputControl implements MouseMotionListener, MouseListener {
 		if (SimpleOpenNI.deviceCount() < 1) {
 			inputMode = InputMode.MOUSE;
 			model.addPlayer(0);
-//			model.addPlayer(1);
+			model.addPlayer(1);
 			applet.addMouseMotionListener(this);
 			applet.addMouseListener(this);
 		} else {
